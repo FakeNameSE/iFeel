@@ -1,37 +1,120 @@
 import React from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, KeyboardAvoidingView } from 'react-native';
+import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
+import * as firebase from 'firebase';
+import { Input } from './components/Input';
+import { Button } from './components/Button';
 
 export default class App extends React.Component {
+  state = {
+    email: '',
+    password: '',
+    authenticating: false,
+    user: null,
+    error: '',
+  }
+
+  // Initialize Firebase
+    componentWillMount() {
+    var config = {
+        apiKey: "AIzaSyAt72bLIRK35d_sKPWDn5Rd6wZyGFpt7AY",
+        authDomain: "ifeel-d97fc.firebaseapp.com",
+        databaseURL: "https://ifeel-d97fc.firebaseio.com",
+        projectId: "ifeel-d97fc",
+        storageBucket: "ifeel-d97fc.appspot.com",
+        messagingSenderId: "639485736592"
+        }
+
+        firebase.initializeApp(config);
+    }
+
+  onPressSignIn() {
+    this.setState({
+      authenticating: true,
+    });
+
+    const { email, password } = this.state;
+
+    firebase.auth().signInWithEmailAndPassword(email, password)
+      .then(user => this.setState({
+        authenticating: false,
+        user,
+        error: '',
+      }))
+      .catch(() => {
+        // Login was not successful
+        firebase.auth().createUserWithEmailAndPassword(email, password)
+          .then(user => this.setState({
+            authenticating: false,
+            user,
+            error: '',
+          }))
+          .catch(() => this.setState({
+            authenticating: false,
+            user: null,
+            error: 'Authentication Failure',
+          }))
+      })
+  }
+
+  onPressLogOut() {
+    firebase.auth().signOut()
+      .then(() => {
+        this.setState({
+          email: '',
+          password: '',
+          authenticating: false,
+          user: null,
+        })
+      }, error => {
+        console.error('Sign Out Error', error);
+      });
+  }
+
+  renderCurrentState() {
+    if (this.state.authenticating) {
+      return (
+        <View style={styles.form}>
+          <ActivityIndicator size='large' />
+        </View>
+      )
+    }
+
+    if (this.state.user !== null) {
+      return (
+        <View style={styles.form}>
+          <Text>Logged In</Text>
+          <Button onPress={() => this.onPressLogOut()}>Log Out</Button>
+        </View>
+      )
+    }
+
+    return (
+      <View style={styles.form}>
+        <Input
+          placeholder='Enter your email...'
+          label='Email'
+          onChangeText={email => this.setState({ email })}
+          value={this.state.email}
+        />
+        <Input
+          placeholder='Enter your password...'
+          label='Password'
+          secureTextEntry
+          onChangeText={password => this.setState({ password })}
+          value={this.state.password}
+        />
+        <Button onPress={() => this.onPressSignIn()}>Let me in!</Button>
+        <Text>{this.state.error}</Text>
+      </View>
+    )
+
+  }
+
   render() {
     return (
-      <KeyboardAvoidingView behavior="padding" style={styles.container}>
-        <View style={styles.container}>
-          <Text>
-            Welcome to iFeel!
-          </Text>
-          <TextInput
-            placeholder="username or email"
-            placeholderTextColor='black'
-            returnKeyType="next"
-            onSubmitEditing={() => this.passwordInput.focus()}
-            keyboardType="email-address"
-            autoCapitalize="none"
-            autoCorrect={false}
-            style={styles.input}
-          />
-          <TextInput
-            placeholder="password"
-            placeholderTextColor='black'
-            returnKeyType="go"
-            secureTextEntry
-            style={styles.input}
-            ref={(input) => this.passwordInput = input}
-          />
-          <TouchableOpacity style={styles.buttonContainer}>
-            <Text style={styles.buttonText}>LOGIN</Text>
-          </TouchableOpacity>
-        </View>
-      </KeyboardAvoidingView>
+      <View style={styles.container}>
+        {this.renderCurrentState()}
+      </View>
     );
   }
 }
@@ -39,25 +122,13 @@ export default class App extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    padding: 20,
     alignItems: 'center',
     justifyContent: 'center',
-    padding: 20
+    flexDirection: 'row',
+    backgroundColor: '#E84A27',
   },
-  input: {
-    height: 40,
-    width: 250,
-    backgroundColor: 'orange',
-    marginBottom: 20,
-    paddingHorizontal: 15
-  },
-  buttonContainer: {
-    width: 100,
-    backgroundColor: 'blue',
-    paddingVertical: 15
-  },
-  buttonText: {
-    textAlign: 'center',
-    color: 'white'
+  form: {
+    flex: 1
   }
 });
