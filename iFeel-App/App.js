@@ -37,11 +37,12 @@ export default class App extends React.Component {
     firebase.auth().signInWithEmailAndPassword(email, password)
       .then(user => this.setState({
         authenticating: false,
-        user,
+        user: null,
         error: '',
       }))
-      .catch(() => {
+      .catch(() => this.setState({
         // Login was not successful
+        /*
         firebase.auth().createUserWithEmailAndPassword(email, password)
           .then(user => this.setState({
             authenticating: false,
@@ -49,11 +50,11 @@ export default class App extends React.Component {
             error: '',
           }))
           .catch(() => this.setState({
+          */ 
             authenticating: false,
             user: null,
             error: 'Authentication Failure',
           }))
-      })
   }
 
   onPressLogOut() {
