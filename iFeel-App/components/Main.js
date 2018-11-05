@@ -86,12 +86,14 @@ class Main extends React.Component {
     }
 
     if (this.state.user !== null) {
-      return (
+        this.props.navigation.navigate('Chat', { user: this.state.name });
+        /*return (
         <View style={styles.form}>
           <Text>Logged In</Text>
           <Button onPress={() => this.onPressLogOut()}>Let me out!</Button>
         </View>
       )
+      */ 
     }
 
     return (
