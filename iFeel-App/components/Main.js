@@ -40,6 +40,7 @@ class Main extends React.Component {
         user,
         error: '',
       }))
+      .then(() => this.props.navigation.navigate('Chat', { user: this.state.name }))
       .catch(() => this.setState({
             authenticating: false,
             user: null,
@@ -86,7 +87,6 @@ class Main extends React.Component {
     }
 
     if (this.state.user !== null) {
-        this.props.navigation.navigate('Chat', { user: this.state.name });
         /*return (
         <View style={styles.form}>
           <Text>Logged In</Text>

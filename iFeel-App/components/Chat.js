@@ -6,7 +6,7 @@ import { Button } from './Button';
 class Chat extends Component {
   render() {
     return (
-    <View style={styles.form}>
+    <View style={styles.container}>
           <Text>Logged In</Text>
     </View>
     )
