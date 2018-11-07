@@ -5,13 +5,23 @@ import { Input } from './Input';
 import { Button } from './Button';
 
 class Main extends React.Component {
-  state = {
-    email: '',
-    password: '',
-    authenticating: false,
-    user: null,
-    error: '',
-  }
+    static navigationOptions = {
+        title: 'Login',
+        headerStyle: {
+            backgroundColor: '#13294b',
+        },
+        headerTintColor: '#fff',
+        headerTitleStyle: {
+            fontWeight: 'bold',
+        },
+    }
+    state = {
+        email: '',
+        password: '',
+        authenticating: false,
+        user: null,
+        error: '',
+    }
 
   // Initialize Firebase
     componentWillMount() {
