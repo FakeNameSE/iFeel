@@ -5,13 +5,23 @@ import { Input } from './Input';
 import { Button } from './Button';
 
 class Main extends React.Component {
-  state = {
-    email: '',
-    password: '',
-    authenticating: false,
-    user: null,
-    error: '',
-  }
+    static navigationOptions = {
+        title: 'Login',
+        headerStyle: {
+            backgroundColor: '#13294b',
+        },
+        headerTintColor: '#fff',
+        headerTitleStyle: {
+            fontWeight: 'bold',
+        },
+    }
+    state = {
+        email: '',
+        password: '',
+        authenticating: false,
+        user: null,
+        error: '',
+    }
 
   // Initialize Firebase
     componentWillMount() {
@@ -40,6 +50,7 @@ class Main extends React.Component {
         user,
         error: '',
       }))
+      .then(() => this.props.navigation.navigate('Chat', { user: this.state.name }))
       .catch(() => this.setState({
             authenticating: false,
             user: null,
@@ -86,12 +97,13 @@ class Main extends React.Component {
     }
 
     if (this.state.user !== null) {
-      return (
+        /*return (
         <View style={styles.form}>
           <Text>Logged In</Text>
           <Button onPress={() => this.onPressLogOut()}>Let me out!</Button>
         </View>
       )
+      */ 
     }
 
     return (
