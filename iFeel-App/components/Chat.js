@@ -3,7 +3,11 @@ import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 import * as firebase from 'firebase';
 import { Input } from './Input';
 import { Button } from './Button';
+import { Firebase } from './Firebase';
+import { GiftedChat } from 'react-native-gifted-chat';
+
 class Chat extends Component {
+    // Header theming and title.
     static navigationOptions = {
         title: 'Chat',
         headerStyle: {
@@ -14,26 +18,44 @@ class Chat extends Component {
             fontWeight: 'bold',
         },
     }
-    onPressLogOut() {
-        firebase.auth().signOut()
-        .then(() => {
-            this.setState({
-                email: '',
-                password: '',
-                authenticating: false,
-                user: null,
-                })
-                }, error => {
-                    console.error('Sign Out Error', error);
-                })
-        .then(() => this.props.navigation.navigate('Main', { user: this.state.name }));
+    // Way to keep track of messages through state
+    state = {
+        messages: [],
+    };
+
+    // When we open the chat, start looking for messages.
+    componentDidMount() {
+        Firebase.shared.on(message =>
+          this.setState(previousState => ({
+              messages: GiftedChat.append(previousState.messages, message),
+          }))
+        );
     }
+    // Unsubscribe when we close the chat screen.
+    componentWillUnmount() {
+        Firebase.shared.off();
+    }
+
+    get user() {
+        // Return name and UID for GiftedChat to parse
+        return {
+            name: this.props.navigation.state.params.name,
+            _id: Firebase.shared.uid,
+        };
+    }
+    
+    //Show me the messages and chat UI! Updates as state updates.
     render() {
         return (
-        <View style={styles.container}>
-            <Text>Logged In</Text>
-        </View>
-        )}}
+          <GiftedChat
+            messages={this.state.messages}
+            onSend={Firebase.shared.send}
+            user={this.user}
+          />
+        );
+    }
+    
+}
         
 const styles = StyleSheet.create({
   container: {
