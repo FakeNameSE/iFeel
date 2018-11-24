@@ -1,8 +1,8 @@
 import React from 'react';
 import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 import * as firebase from 'firebase';
-import { Input } from './Input';
-import { Button } from './Button';
+import { Input } from '../components/Input';
+import { Button } from '../components/Button';
 
 class Main extends React.Component {
     // Header theming and title

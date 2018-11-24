@@ -2,6 +2,16 @@ import firebase from 'firebase';
 
 class Firebase {
     constructor() {
+        var config = {
+        apiKey: "",
+        authDomain: "ifeel-d97fc.firebaseapp.com",
+        databaseURL: "https://ifeel-d97fc.firebaseio.com",
+        projectId: "ifeel-d97fc",
+        storageBucket: "ifeel-d97fc.appspot.com",
+        messagingSenderId: "639485736592"
+        }
+
+        firebase.initializeApp(config);
         // Get auth state at beginning.
         this.observeAuth();
     }
