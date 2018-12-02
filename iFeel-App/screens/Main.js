@@ -1,3 +1,6 @@
+// Thank you https://www.youtube.com/watch?v=pnBsuXTK8po for the
+// tutorial on authentication with firebase.
+
 import React from 'react';
 import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 import * as firebase from 'firebase';
