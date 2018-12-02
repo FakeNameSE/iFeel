@@ -1,10 +1,11 @@
 import React from 'react';
 import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 import * as firebase from 'firebase';
-import { Input } from './Input';
-import { Button } from './Button';
+import { Input } from '../components/Input';
+import { Button } from '../components/Button';
 
 class Main extends React.Component {
+    // Header theming and title
     static navigationOptions = {
         title: 'Login',
         headerStyle: {
@@ -23,7 +24,7 @@ class Main extends React.Component {
         error: '',
     }
 
-  // Initialize Firebase
+    // Initialize Firebase
     componentWillMount() {
     var config = {
         apiKey: "",
@@ -37,74 +38,59 @@ class Main extends React.Component {
         firebase.initializeApp(config);
     }
 
-  onPressSignIn() {
-    this.setState({
-      authenticating: true,
-    });
-
-    const { email, password } = this.state;
-
-    firebase.auth().signInWithEmailAndPassword(email, password)
-      .then(user => this.setState({
-        authenticating: false,
-        user,
-        error: '',
-      }))
-      .then(() => this.props.navigation.navigate('Chat', { user: this.state.name }))
-      .catch(() => this.setState({
-            authenticating: false,
-            user: null,
-            error: 'Authentication Failure',
-          }))
-/*
-      .catch(() => {
-        // Login was not successful
-        firebase.auth().createUserWithEmailAndPassword(email, password)
-          .then(user => this.setState({
-            authenticating: false,
-            user,
-            error: '',
-          }))
-          .catch(() => this.setState({
-            authenticating: false,
-            user: null,
-            error: 'Authentication Failure',
-          }))
-      })
-      */
-  }
-  onPressLogOut() {
-    firebase.auth().signOut()
-      .then(() => {
+    onPressSignIn() {
         this.setState({
-          email: '',
-          password: '',
-          authenticating: false,
-          user: null,
-        })
-      }, error => {
-        console.error('Sign Out Error', error);
-      });
-  }
+            authenticating: true,
+        });
 
-  renderCurrentState() {
-    if (this.state.authenticating) {
-      return (
-        <View style={styles.form}>
-          <ActivityIndicator size='large' />
-        </View>
-      )
+        const { email, password } = this.state;
+
+        firebase.auth().signInWithEmailAndPassword(email, password)
+          .then(user => this.setState({
+              authenticating: false,
+              user,
+              error: '',
+        }))
+        // Pass name along when switching to new window
+        .then(() => this.props.navigation.navigate('Chat', { name: this.state.email }))
+        .catch(() => this.setState({
+            authenticating: false,
+            user: null,
+            error: 'Authentication Failure',
+        }))
     }
 
-    if (this.state.user !== null) {
+    onPressLogOut() {
+        firebase.auth().signOut()
+          .then(() => {
+              this.setState({
+                  email: '',
+                  password: '',
+                  authenticating: false,
+                  user: null,
+              })
+          }, error => {
+              console.error('Sign Out Error', error);
+          });
+    }
+
+    renderCurrentState() {
+        if (this.state.authenticating) {
+            return (
+              <View style={styles.form}>
+                <ActivityIndicator size='large' />
+              </View>
+            )
+        }
+        if (this.state.user !== null) {
         /*return (
         <View style={styles.form}>
           <Text>Logged In</Text>
           <Button onPress={() => this.onPressLogOut()}>Let me out!</Button>
         </View>
-      )
-      */ 
-    }
+        )
+        */
+        }
 
     return (
       <View style={styles.form}>
@@ -127,7 +113,6 @@ class Main extends React.Component {
     )
 
   }
-
   render() {
     return (
       <View style={styles.container}>
