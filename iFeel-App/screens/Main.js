@@ -4,6 +4,8 @@ import * as firebase from 'firebase';
 import { Input } from '../components/Input';
 import { Button } from '../components/Button';
 
+const { EmojiOverlay } = require('react-native-emoji-picker');
+
 class Main extends React.Component {
     // Header theming and title
     static navigationOptions = {
@@ -17,6 +19,7 @@ class Main extends React.Component {
         },
     }
     state = {
+        showPicker: false,
         email: '',
         password: '',
         authenticating: false,
@@ -27,7 +30,7 @@ class Main extends React.Component {
     // Initialize Firebase
     componentWillMount() {
     var config = {
-        apiKey: "",
+        apiKey: "AIzaSyAt72bLIRK35d_sKPWDn5Rd6wZyGFpt7AY",
         authDomain: "ifeel-d97fc.firebaseapp.com",
         databaseURL: "https://ifeel-d97fc.firebaseio.com",
         projectId: "ifeel-d97fc",
@@ -74,6 +77,11 @@ class Main extends React.Component {
           });
     }
 
+    onPressKeyboard(emoji) {
+      this.setState({showPicker: false})
+      console.log(emoji)
+    }
+
     renderCurrentState() {
         if (this.state.authenticating) {
             return (
@@ -108,6 +116,15 @@ class Main extends React.Component {
           value={this.state.password}
         />
         <Button onPress={() => this.onPressSignIn()}>Let me in!</Button>
+        <Button onPress={() => this.setState({showPicker: true})}>Keyboard</Button>
+
+        <EmojiOverlay 
+          style={styles.emojiPicker} 
+          visible={this.state.showPicker}
+          onTapOutside={() => this.setState({showPicker: false})}
+          horizontal={true}
+          onEmojiSelected={this.onPressKeyboard}/>
+        
         <Text>{this.state.error}</Text>
       </View>
     )
