@@ -1,10 +1,20 @@
+// Thank you https://blog.expo.io/how-to-build-a-chat-app-with-react-native-3ef8604ebb3c
+// for the tutorial on using Gifted Chat.
+
 import React, { Component } from 'react';
 import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 import * as firebase from 'firebase';
 import { Input } from '../components/Input';
 import { Button } from '../components/Button';
+import { SendButton } from '../components/SendButton';
+import {botResponses} from '../Constants.js';
 //import { Firebase } from './Firebase';
 import { GiftedChat } from 'react-native-gifted-chat';
+// To keep keyboard from covering up text input.
+import { KeyboardAvoidingView } from 'react-native';
+// Because keyboard avoiding behavior is platform specific.
+import {Platform} from 'react-native';
+console.disableYellowBox = true;
 
 class Chat extends Component {
     // Header theming and title.
@@ -18,11 +28,11 @@ class Chat extends Component {
             fontWeight: 'bold',
         },
     }
+    
     // Way to keep track of messages through state
     state = {
         messages: [],
     };
-
 
     // Reference to where in Firebase DB messages will be stored.
     get ref() {
@@ -75,11 +85,21 @@ class Chat extends Component {
             this.append(message);
         }
     };
+
+    botSend = messages => {
+        //const { text, user } = messages[0];
+        text = botResponses[Math.floor(Math.random() * botResponses.length)];
+        user = this.user;
+            const message = {
+                text,
+                user,
+                timestamp: this.timestamp,
+            };
+            this.append(message);
+    };
+    
     // Save message objects. Actually sends them to server.
     append = message => this.ref.push(message);
-
-
-
 
     // When we open the chat, start looking for messages.
     componentDidMount() {
@@ -94,6 +114,8 @@ class Chat extends Component {
         this.off();
     }
 
+    // Used to display the current user's messages on the other side of
+    // the screen.
     get user() {
         // Return name and UID for GiftedChat to parse
         return {
@@ -105,23 +127,27 @@ class Chat extends Component {
     //Show me the messages and chat UI! Updates as state updates.
     render() {
         return (
-          <GiftedChat
-            messages={this.state.messages}
-            onSend={this.send}
-            user={this.user}
-          />
+        <View style={styles.container}>
+            <SendButton onPress={() => this.botSend()}>Bot!</SendButton>
+            <GiftedChat
+                messages={this.state.messages}
+                onSend={this.send}
+                user={this.user}
+            />
+            <KeyboardAvoidingView behavior={ Platform.OS === 'android' ? 'padding' :  null} keyboardVerticalOffset={80} />
+         </View>
         );
     }
     
 }
-        
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexDirection: 'row',
+    //padding: 20,
+    //alignItems: 'center',
+    //justifyContent: 'center',
+    //flexDirection: 'row',
     backgroundColor: '#E84A27',
   },
   form: {
