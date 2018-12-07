@@ -25,10 +25,11 @@ const styles = StyleSheet.create({
     width: '100%',
     borderColor: '#eee',
     borderBottomWidth: 2,
+  
   },
   label: {
     padding: 5,
-    paddingBottom: 0,
+    paddingBottom: 5,
     color: '#333',
     fontSize: 17,
     fontWeight: '700',
@@ -37,12 +38,13 @@ const styles = StyleSheet.create({
   input: {
     paddingRight: 5,
     paddingLeft: 5,
-    paddingBottom: 2,
+    paddingBottom: 5,
     //color: '#333',
     backgroundColor: 'white',
-    //marginBottom: 20,
+    marginBottom: 5,
     fontSize: 18,
     width: '100%',
+    borderRadius: 2,
   }
 });
 
