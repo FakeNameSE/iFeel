@@ -9,7 +9,7 @@ class Gchat extends React.Component {
     static navigationOptions = {
         title: 'Chats',
         headerStyle: {
-            backgroundColor: '#4caf50',
+            backgroundColor: '#f57c00',
         },
         headerTintColor: '#fff',
         headerTitleStyle: {
@@ -33,14 +33,25 @@ class Gchat extends React.Component {
             };
         }
 
+        renderCurrentState() {
+      return (
+        <View style={styles.form}>
+          <Button onPress={() => this.onPressGroup1Redirect()}>Group 1</Button>
+          <Button onPress={() => this.onPressGroup1Redirect()}>Group 2</Button>
+          <Button onPress={() => this.onPressGroup1Redirect()}>Group 3</Button>
+          <Button onPress={() => this.onPressGroup1Redirect()}>Group 4</Button>
+          <Button onPress={() => this.onPressGroup1Redirect()}>Group 5</Button>
+        </View>
+      )
+  
+    }
+        
           render() {
               const {navigate} = this.props.navigation;
               return (
-                <Button onPress={() => this.onPressGroup1Redirect()}>Group 1</Button>
-                <Button onPress={() => this.onPressGroupRedirect()}>Group 2</Button>
-                <Button onPress={() => this.onPressGroupRedirect()}>Group 3</Button>
-                <Button onPress={() => this.onPressGroupRedirect()}>Group 4</Button>
-                <Button onPress={() => this.onPressGroupRedirect()}>Group 5</Button>
+                <View style={styles.container}>
+                  {this.renderCurrentState()}
+                </View>
               );
             }
 
@@ -51,10 +62,9 @@ const styles = StyleSheet.create({
     container: {
       flex: 1,
       padding: 20,
-      alignItems: 'center',
       justifyContent: 'center',
       flexDirection: 'row',
-      backgroundColor: '#E84A27',
+      backgroundColor: '#1976d2',
     },
     form: {
       flex: 1
