@@ -7,10 +7,11 @@ import * as firebase from 'firebase';
 import { Input } from '../components/Input';
 import { Button } from '../components/Button';
 
-class Main extends React.Component {
+class CreateAccount extends React.Component {
+state = { email: '', password: '', errorMessage: null }
     // Header theming and title
     static navigationOptions = {
-        title: 'Login',
+        title: 'Create Account',
         headerStyle: {
             backgroundColor: '#13294b',
         },
@@ -19,68 +20,14 @@ class Main extends React.Component {
             fontWeight: 'bold',
         },
     }
-    state = {
-        email: '',
-        password: '',
-        authenticating: false,
-        user: null,
-        error: '',
-    }
-
-    // Initialize Firebase
-    componentWillMount() {
-    var config = {
-        apiKey: "AIzaSyAt72bLIRK35d_sKPWDn5Rd6wZyGFpt7AY",
-        authDomain: "ifeel-d97fc.firebaseapp.com",
-        databaseURL: "https://ifeel-d97fc.firebaseio.com",
-        projectId: "ifeel-d97fc",
-        storageBucket: "ifeel-d97fc.appspot.com",
-        messagingSenderId: "639485736592"
-        }
-
-        firebase.initializeApp(config);
-    }
-
-    onPressSignIn() {
-        this.setState({
-            authenticating: true,
-        });
-
-        const { email, password } = this.state;
-
-        firebase.auth().signInWithEmailAndPassword(email, password)
-          .then(user => this.setState({
-              authenticating: false,
-              user,
-              error: '',
-        }))
-        // Pass name along when switching to new window
-        .then(() => this.props.navigation.navigate('Chat', { name: this.state.email }))
-        .catch(() => this.setState({
-            authenticating: false,
-            user: null,
-            error: 'Authentication Failure',
-        }))
-    }
-
-    onPressCreateAccount() {
-      
-      this.props.navigation.navigate('CreateAccount')
-    }
-
-    onPressLogOut() {
-        firebase.auth().signOut()
-          .then(() => {
-              this.setState({
-                  email: '',
-                  password: '',
-                  authenticating: false,
-                  user: null,
-              })
-          }, error => {
-              console.error('Sign Out Error', error);
-          });
-    }
+    
+    handleSignUp = () => {
+        firebase
+          .auth()
+          .createUserWithEmailAndPassword(this.state.email, this.state.password)
+          .then(() => this.props.navigation.navigate('Main'))
+          .catch(error => this.setState({ errorMessage: error.message }))
+      }
 
     renderCurrentState() {
         if (this.state.authenticating) {
@@ -115,14 +62,13 @@ class Main extends React.Component {
           onChangeText={password => this.setState({ password })}
           value={this.state.password}
         />
-        <Button onPress={() => this.onPressSignIn()}>Let me in!</Button>
-        <Button onPress={() => this.onPressCreateAccount()}>Create an account!</Button>
+        <Button onPress={() => this.handleSignUp()}>Create an account!</Button>
         <Text>{this.state.error}</Text>
       </View>
     )
 
   }
-  render() {
+  render(){
     return (
       <View style={styles.container}>
         {this.renderCurrentState()}
@@ -130,7 +76,6 @@ class Main extends React.Component {
     );
   }
 }
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -145,4 +90,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default Main; 
+export default CreateAccount; 
