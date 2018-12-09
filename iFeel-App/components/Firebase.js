@@ -3,7 +3,7 @@ import firebase from 'firebase';
 class Firebase {
     constructor() {
         var config = {
-        apiKey: "",
+        apiKey: "AIzaSyAt72bLIRK35d_sKPWDn5Rd6wZyGFpt7AY",
         authDomain: "ifeel-d97fc.firebaseapp.com",
         databaseURL: "https://ifeel-d97fc.firebaseio.com",
         projectId: "ifeel-d97fc",
