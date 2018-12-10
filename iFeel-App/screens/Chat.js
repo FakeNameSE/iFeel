@@ -21,7 +21,7 @@ class Chat extends Component {
     static navigationOptions = {
         title: 'Chat',
         headerStyle: {
-            backgroundColor: '#d35400',
+            backgroundColor: '#13294B',
         },
         headerTintColor: '#fff',
         headerTitleStyle: {

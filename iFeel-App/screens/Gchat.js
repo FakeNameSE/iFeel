@@ -9,7 +9,7 @@ class Gchat extends React.Component {
     static navigationOptions = {
         title: 'Chats',
         headerStyle: {
-            backgroundColor: '#d35400',
+            backgroundColor: '#13294B',
         },
         headerTintColor: '#fff',
         headerTitleStyle: {
@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
       padding: 20,
       justifyContent: 'center',
       flexDirection: 'row',
-      backgroundColor: '#ecf0f1',
+      backgroundColor: '#E84A27',
     },
     form: {
       flex: 1
