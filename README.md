@@ -31,4 +31,4 @@ Firebase: Used for authentication.
 
 ## Contributing
 
-Please see list of [contributors] (https://github.com/CS196Illinois/iFeel/graphs/contributors) who participated in this project.
+Please see list of [contributors](https://github.com/CS196Illinois/iFeel/graphs/contributors) who participated in this project.
