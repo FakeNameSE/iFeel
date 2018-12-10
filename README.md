@@ -7,9 +7,10 @@ A social media app that allows people to interact with others using a limited su
 
 ### Prerequisites
 
-Have Node and Expo installed.
-1. For Node installation: <https://nodejs.org/en/download/>
-2. For Expo installation: <https://expo.io/tools>
+Have Node, Expo, and Firebase installed.
+- For Node installation: <https://nodejs.org/en/download/>
+- For Expo installation: <https://expo.io/tools>
+- For Firebase intstallation: <https://firebase.google.com/docs/web/setup>
 
 ### Installation
 
