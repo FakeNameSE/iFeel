@@ -25,4 +25,4 @@ Congrats! You can now use the iFeel app!
 
 ## Built With
 
-React-Native, Firebase
+React-Native, Expo, Firebase
