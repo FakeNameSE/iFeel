@@ -9,7 +9,7 @@ A social media app that allows people to interact with others using a limited su
 
 Have React-Native, Node, Expo, and Firebase installed.
 - For React-Native installation: <https://facebook.github.io/react-native/docs/getting-started.html>
-\* **Note: The link provides instructions for both Mac and Windows installation. Please make sure you select the correct development OS and target OS.** \*
+\n **Note: The link provides instructions for both Mac and Windows installation. Please make sure you select the correct development OS and target OS.**
 - For Node installation: <https://nodejs.org/en/download/>
 - For Expo installation: <https://expo.io/tools>
 - For Firebase installation: <https://firebase.google.com/docs/web/setup>
