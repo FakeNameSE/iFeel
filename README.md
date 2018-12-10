@@ -10,16 +10,22 @@ A social media app that allows people to interact with others using a limited su
 Have Node, Expo, and Firebase installed.
 - For Node installation: <https://nodejs.org/en/download/>
 - For Expo installation: <https://expo.io/tools>
-- For Firebase intstallation: <https://firebase.google.com/docs/web/setup>
+- For Firebase installation: <https://firebase.google.com/docs/web/setup>
 
 ### Installing
+
+After installing Node:
+1. To install Expo directly in your terminal, type `npm install -g expo-cli`.
+- *Having Expo on your phone will help you run and test your app locally. Search "Expo Client" in the App Store or Google Play Store and download the app on your phone.*
+2. To install Firebase directly in your terminal, type `npm install firebase --save`.
+
 
 ## Deployment
 
 To run this app on a live system:
 1. Type `npm start` in your terminal.
-2. Scan the QR code that shows up on your screen on your phone.
-3. Allow time for the app to build and compile.
+2. Scan the QR code that pops up on your screen using your phone.
+3. Allow some time for the app to build and compile.
 
 Congrats! You can now use the iFeel app!
 
