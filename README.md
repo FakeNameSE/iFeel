@@ -26,7 +26,9 @@ Congrats! You can now use the iFeel app!
 ## Built With
 
 React-Native: Used to create and build the app.
+
 Expo: Used to run app locally on iOS and/or Android.
+
 Firebase: Used for authentication.
 
 ## Contributing
