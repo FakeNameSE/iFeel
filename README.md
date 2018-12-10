@@ -15,8 +15,7 @@ Have Node, Expo, and Firebase installed.
 ### Installing
 
 After installing Node:
-1. To install Expo directly in your terminal, type `npm install -g expo-cli`.
-- *Having Expo on your phone will help you run and test your app locally. Search "Expo Client" in the App Store or Google Play Store and download the app on your phone.*
+1. To install Expo directly in your terminal, type `npm install -g expo-cli`. *Having Expo on your phone will help you run and test your app locally. Search "Expo Client" in the App Store or Google Play Store and download the app on your phone.*
 2. To install Firebase directly in your terminal, type `npm install firebase --save`.
 
 
