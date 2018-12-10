@@ -4,6 +4,7 @@ A social media app that allows people to interact with others using a limited su
 
 ## Getting Started
 
+
 ### Prerequisites
 
 Have Node and Expo installed.
@@ -11,3 +12,15 @@ Have Node and Expo installed.
 2. For Expo installation: [<https://expo.io/tools>]
 
 ### Installation
+
+## Deployment
+
+To run this app on a live system:
+1. Type `npm start` in your terminal.
+2. Scan the QR code that shows up on your screen.
+3. Allow time for the app to build and compile.
+Congrats! You can now use the iFeel app!
+
+## Built With
+
+React-Native, Firebase
