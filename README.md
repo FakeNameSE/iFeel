@@ -4,13 +4,12 @@ A social media app that allows people to interact with others using a limited su
 
 ## Getting Started
 
-
 ### Prerequisites
 
 Have React-Native, Node, Expo, and Firebase installed.
 - For React-Native installation: <https://facebook.github.io/react-native/docs/getting-started.html>
 
-**Note: The link provides instructions for both Mac and Windows installation. Please make sure you select the correct development OS and target OS.**
+**Note: The link above provides instructions for both Mac and Windows installation. Please make sure you select the correct Development OS and Target OS.**
 
 - For Node installation: <https://nodejs.org/en/download/>
 - For Expo installation: <https://expo.io/tools>
@@ -19,11 +18,12 @@ Have React-Native, Node, Expo, and Firebase installed.
 ### Installing
 
 After installing Node:
-1. To install Expo directly in your terminal, type `npm install -g expo-cli`.
+1. To install React-Native, run `npm install -g react-native-cli` in your terminal.
+2. To install Expo directly in your terminal, type `npm install -g expo-cli`.
 
-\* *Having Expo on your phone will help you run and test your app locally. Search "Expo Client" in the App Store or Google Play Store and download the app on your phone.* \*
+\* *Having Expo also on your phone will help you run and test your app locally. Search "Expo Client" in the App Store or Google Play Store and download the app on your phone.* \*
 
-2. To install Firebase directly in your terminal, type `npm install firebase --save`.
+3. To install Firebase directly in your terminal, type `npm install firebase --save`.
 
 
 ## Deployment
