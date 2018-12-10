@@ -14,6 +14,7 @@
     "expo-cli": "^2.4.0",
     "firebase": "^5.5.9",
     "grpc": "^1.16.1",
+    "package-json-to-readme": "^2.1.1",
     "react": "^16.3.1",
     "react-native": "https://github.com/expo/react-native/archive/sdk-30.0.0.tar.gz",
     "react-native-cli": "^2.0.1",
