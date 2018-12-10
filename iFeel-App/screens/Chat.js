@@ -21,7 +21,7 @@ class Chat extends Component {
     static navigationOptions = {
         title: 'Chat',
         headerStyle: {
-            backgroundColor: '#13294b',
+            backgroundColor: '#d35400',
         },
         headerTintColor: '#fff',
         headerTitleStyle: {
@@ -32,7 +32,7 @@ class Chat extends Component {
     // Way to keep track of messages through state
     state = {
         messages: [],
-    };
+    };s
 
     // Reference to where in Firebase DB messages will be stored.
     get ref() {

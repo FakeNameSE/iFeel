@@ -12,7 +12,7 @@ class Main extends React.Component {
     static navigationOptions = {
         title: 'Login',
         headerStyle: {
-            backgroundColor: '#13294b',
+            backgroundColor: '#d35400',
         },
         headerTintColor: '#fff',
         headerTitleStyle: {
@@ -55,7 +55,7 @@ class Main extends React.Component {
               error: '',
         }))
         // Pass name along when switching to new window
-        .then(() => this.props.navigation.navigate('Chat', { name: this.state.email }))
+        .then(() => this.props.navigation.navigate('Gchat', { name: this.state.email }))
         .catch(() => this.setState({
             authenticating: false,
             user: null,
@@ -138,7 +138,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'row',
-    backgroundColor: '#E84A27',
+    backgroundColor: '#ecf0f1',
   },
   form: {
     flex: 1
