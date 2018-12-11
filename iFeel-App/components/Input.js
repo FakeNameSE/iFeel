@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
   },
   label: {
     padding: 5,
-    paddingBottom: 5,
+    paddingBottom: 0,
     color: '#333',
     fontSize: 17,
     fontWeight: '700',
@@ -38,11 +38,11 @@ const styles = StyleSheet.create({
   input: {
     paddingRight: 5,
     paddingLeft: 5,
-    paddingBottom: 5,
+    paddingBottom: 2,
     paddingTop: 5,
     //color: '#333',
     backgroundColor: 'white',
-    marginBottom: 5,
+    //marginBottom: 5,
     fontSize: 18,
     width: '100%',
     borderRadius: 2,

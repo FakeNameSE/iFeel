@@ -1,7 +1,8 @@
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 
-const SendButton = ({ onPress, children }) => {
+// Round button to hit to have the bot send a message.
+const BotButton = ({ onPress, children }) => {
   return (
     <TouchableOpacity onPress={onPress} style={styles.button}>
       <Text style={styles.text}>{ children }</Text>
@@ -29,4 +30,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export { SendButton }; 
+export { BotButton }; 

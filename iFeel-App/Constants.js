@@ -4,7 +4,8 @@ export const botResponses = [
     "I hope this response provides you with empty validation!",
     "Carthago delenda est.",
     "This is emotional support",
-    "Hey, it's Geoff Challen!"
+    "Hey, it's Geoff Challen!",
+    "👍"
 ];
 
 export default botResponses;
