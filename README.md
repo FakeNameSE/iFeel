@@ -47,10 +47,11 @@ To run this app on a live system:
 
  1. Create a Firebase account and project with authentication through email and database enabled.
  2. Add the api key information to the relevant section at the beginning of Main.js.
- 3. Run `npm start` in your terminal.
- 3. Scan the QR code that pops up on your screen using your phone.
- 4. Allow some time for the app to build and compile.
- 5. Get your mind blown by this apps awesomeness!
+ 3. `cd` into `iFeel-App`
+ 4. Run `npm start` in your terminal.
+ 5. Scan the QR code that pops up on your screen using your phone.
+ 6. Allow some time for the app to build and compile.
+ 7. Get your mind blown by this apps awesomeness!
 
 Congrats! You can now use the iFeel app!
 
