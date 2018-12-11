@@ -134,6 +134,8 @@ class Chat extends Component {
     }
     
     //Show me the messages and chat UI! Updates as state updates.
+    // Platform specific hack to ensure that the keyboard does
+    // not cover the text composer.
     render() {
         return (
         <View style={styles.container}>
@@ -143,8 +145,6 @@ class Chat extends Component {
                 onSend={this.send}
                 user={this.user}
             />
-            // Platform specific hack to ensure that the keyboard does
-            // not cover the text composer.
             <KeyboardAvoidingView behavior={ Platform.OS === 'android' ? 'padding' :  null} keyboardVerticalOffset={80} />
          </View>
         );
