@@ -83,10 +83,6 @@ class Main extends React.Component {
         this.props.navigation.navigate('CreateAccount')
     }
 
-    onPressKeyboard() {
-      this.props.navigation.navigate('Keyboard')
-    }
-
     // Method to log the user out.
     // Not used right now, but you never know when you might need it.
     onPressLogOut() {
@@ -134,7 +130,6 @@ class Main extends React.Component {
             />
             <Button onPress={() => this.onPressSignIn()}>Let me in!</Button>
             <Button onPress={() => this.onPressCreateAccount()}>Create an account!</Button>
-            <Button onPress={() => this.onPressKeyboard()}>Keyboard</Button>
             <Text>{this.state.error}</Text>
           </View>
         )
