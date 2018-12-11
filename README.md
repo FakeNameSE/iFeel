@@ -4,6 +4,8 @@ The culmination of technical progress -- three hundred thousand years of evoluti
 
 Specifically, this is a group messenger that that allows people to interact with others using a limited subset of emotions and feign carring about others emotions with a bot.
 
+The inspiration for the name comes from an imaginary app in the novel *The Nix* by Nathan Hill.
+
 ## What is this and why the excellent clashing color scheme?
 Final project for CS 196 at UIUC.
 Group members
