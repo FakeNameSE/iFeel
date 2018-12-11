@@ -41,7 +41,7 @@ class Chat extends Component {
     // Way to keep track of messages through state
     state = {
         messages: [],
-    };s
+    };
 
     // Reference to where in Firebase DB messages will be stored.
     get ref() {
