@@ -35,7 +35,7 @@ class Main extends React.Component {
     // Initialize Firebase
     componentWillMount() {
         var config = {
-            apiKey: "AIzaSyAt72bLIRK35d_sKPWDn5Rd6wZyGFpt7AY",
+            apiKey: "",
             authDomain: "ifeel-d97fc.firebaseapp.com",
             databaseURL: "https://ifeel-d97fc.firebaseio.com",
             projectId: "ifeel-d97fc",
