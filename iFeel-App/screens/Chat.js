@@ -1,28 +1,47 @@
+// Thank you https://blog.expo.io/how-to-build-a-chat-app-with-react-native-3ef8604ebb3c
+// for the tutorial on using Gifted Chat.
+
+// Your run of the mill React-Native imports.
 import React, { Component } from 'react';
-import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import * as firebase from 'firebase';
+// Our custom components.
 import { Input } from '../components/Input';
 import { Button } from '../components/Button';
-//import { Firebase } from './Firebase';
+import { BotButton } from '../components/BotButton';
+// Array of potential bot responses. Might be a fancy schmancy Markov
+// chain like thing in the future.
+import {botResponses} from '../Constants.js';
+// Gifted-chat import. The library takes care of fun stuff like
+// rendering message bubbles and having a message composer.
 import { GiftedChat } from 'react-native-gifted-chat';
+// To keep keyboard from covering up text input.
+import { KeyboardAvoidingView } from 'react-native';
+// Because keyboard avoiding behavior is platform specific.
+import {Platform} from 'react-native';
+
+// To hide the big Expo warning about timers. Firebase listener stuff
+// likes them, but react-native does not. There is currently an issue
+// open in React-Native to fix this.
+console.disableYellowBox = true;
 
 class Chat extends Component {
     // Header theming and title.
     static navigationOptions = {
         title: 'Chat',
         headerStyle: {
-            backgroundColor: '#13294b',
+            backgroundColor: '#13294B',
         },
         headerTintColor: '#fff',
         headerTitleStyle: {
             fontWeight: 'bold',
         },
     }
+    
     // Way to keep track of messages through state
     state = {
         messages: [],
     };
-
 
     // Reference to where in Firebase DB messages will be stored.
     get ref() {
@@ -75,11 +94,21 @@ class Chat extends Component {
             this.append(message);
         }
     };
+
+    botSend = messages => {
+        //const { text, user } = messages[0];
+        text = botResponses[Math.floor(Math.random() * botResponses.length)];
+        user = this.user;
+            const message = {
+                text,
+                user,
+                timestamp: this.timestamp,
+            };
+            this.append(message);
+    };
+    
     // Save message objects. Actually sends them to server.
     append = message => this.ref.push(message);
-
-
-
 
     // When we open the chat, start looking for messages.
     componentDidMount() {
@@ -94,6 +123,8 @@ class Chat extends Component {
         this.off();
     }
 
+    // Used to display the current user's messages on the other side of
+    // the screen.
     get user() {
         // Return name and UID for GiftedChat to parse
         return {
@@ -105,23 +136,29 @@ class Chat extends Component {
     //Show me the messages and chat UI! Updates as state updates.
     render() {
         return (
-          <GiftedChat
-            messages={this.state.messages}
-            onSend={this.send}
-            user={this.user}
-          />
+        <View style={styles.container}>
+            <BotButton onPress={() => this.botSend()}>Bot!</BotButton>
+            <GiftedChat
+                messages={this.state.messages}
+                onSend={this.send}
+                user={this.user}
+            />
+            // Platform specific hack to ensure that the keyboard does
+            // not cover the text composer.
+            <KeyboardAvoidingView behavior={ Platform.OS === 'android' ? 'padding' :  null} keyboardVerticalOffset={80} />
+         </View>
         );
     }
     
 }
-        
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexDirection: 'row',
+    //padding: 20,
+    //alignItems: 'center',
+    //justifyContent: 'center',
+    //flexDirection: 'row',
     backgroundColor: '#E84A27',
   },
   form: {

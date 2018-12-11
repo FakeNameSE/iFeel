@@ -4,8 +4,6 @@ import * as firebase from 'firebase';
 import { Input } from '../components/Input';
 import { Button } from '../components/Button';
 
-const { EmojiOverlay } = require('react-native-emoji-picker');
-
 class Main extends React.Component {
     // Header theming and title
     static navigationOptions = {
@@ -19,7 +17,6 @@ class Main extends React.Component {
         },
     }
     state = {
-        showPicker: false,
         email: '',
         password: '',
         authenticating: false,
@@ -63,6 +60,15 @@ class Main extends React.Component {
         }))
     }
 
+    // Method to call if the user clicks the button to create a new
+    // account.
+    onPressCreateAccount() {
+      // Pretty straightforward, just take the user to the Account
+      // Creation page.
+      this.props.navigation.navigate('CreateAccount')
+    }
+
+
     onPressLogOut() {
         firebase.auth().signOut()
           .then(() => {
@@ -77,59 +83,41 @@ class Main extends React.Component {
           });
     }
 
-    onPressKeyboard(emoji) {
-      this.setState({showPicker: false})
-      console.log(emoji)
+    onPressKeyboard() {
+      this.props.navigation.navigate('Keyboard')
     }
 
     renderCurrentState() {
         if (this.state.authenticating) {
             return (
               <View style={styles.form}>
-                <ActivityIndicator size='large' />
+                <ActivityIndicator size='large'/>
               </View>
             )
         }
-        if (this.state.user !== null) {
-        /*return (
+
+      return (
         <View style={styles.form}>
-          <Text>Logged In</Text>
-          <Button onPress={() => this.onPressLogOut()}>Let me out!</Button>
+          <Input
+            placeholder='Enter your email...'
+            label='Email'
+            onChangeText={email => this.setState({ email })}
+            value={this.state.email}
+          />
+          <Input
+            placeholder='Enter your password...'
+            label='Password'
+            secureTextEntry
+            onChangeText={password => this.setState({ password })}
+            value={this.state.password}
+          />
+          <Button onPress={() => this.onPressSignIn()}>Let me in!</Button>
+          <Button onPress={() => this.onPressCreateAccount()}>Create an account!</Button>
+          <Button onPress={() => this.onPressKeyboard()}>Keyboard</Button>
         </View>
-        )
-        */
-        }
-
-    return (
-      <View style={styles.form}>
-        <Input
-          placeholder='Enter your email...'
-          label='Email'
-          onChangeText={email => this.setState({ email })}
-          value={this.state.email}
-        />
-        <Input
-          placeholder='Enter your password...'
-          label='Password'
-          secureTextEntry
-          onChangeText={password => this.setState({ password })}
-          value={this.state.password}
-        />
-        <Button onPress={() => this.onPressSignIn()}>Let me in!</Button>
-        <Button onPress={() => this.setState({showPicker: true})}>Keyboard</Button>
-
-        <EmojiOverlay 
-          style={styles.emojiPicker} 
-          visible={this.state.showPicker}
-          onTapOutside={() => this.setState({showPicker: false})}
-          horizontal={true}
-          onEmojiSelected={this.onPressKeyboard}/>
-        
-        <Text>{this.state.error}</Text>
-      </View>
     )
-
   }
+  
   render() {
     return (
       <View style={styles.container}>

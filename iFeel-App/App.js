@@ -1,6 +1,8 @@
 // Import the screens
 import Main from './screens/Main';
 import Chat from './screens/Chat';
+import CreateAccount from './screens/CreateAccount';
+import Gchat from './screens/Gchat';
 import Keyboard from './screens/Keyboard';
 // Import React Navigation
 import { createStackNavigator } from 'react-navigation'
@@ -8,7 +10,9 @@ import { createStackNavigator } from 'react-navigation'
 const navigator = createStackNavigator({
   Main: { screen: Main },
   Chat: { screen: Chat },
-  Keyboard: { screen: Keyboard },
+  CreateAccount: { screen: CreateAccount},
+  Gchat: { screen: Gchat},
+  Keyboard: { screen: Keyboard }
 });
 // Export it as the root component
 export default navigator

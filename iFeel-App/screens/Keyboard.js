@@ -1,67 +1,52 @@
-import React, {
-    PropTypes,
-    Component,
-  } from 'react'
-  
-  import {
-   StyleSheet,
-    Text,
-    View,
-    TouchableHighlight,
-  } from 'react-native'
-  
-import { EmojiOverlay } from '../'
+import React from 'react';
+import { StyleSheet, Text, View, SafeAreaView } from 'react-native';
 
-const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: '#F5FCFF',
-    },
-    emoji: {
-      fontSize: 50,
-      textAlign: 'center',
-      margin: 50,
-      color: 'black'
-    },
-  });
+import EmojiSelector, { Categories } from '../module';
+const THEME = '#007AFF';
 
-  class Keyboard extends Component {
-    state = {
-      selectedEmoji: null,
-      showPicker: false,
-    };
+class Keyboard extends React.Component {
   
-    _emojiSelected = emoji => {
-      this.setState({
-        selectedEmoji: emoji,
-        showPicker: false,
-      });
-    }
-  
-    render() {
-      return (
-        <View style={styles.container}>
-  
-          <TouchableHighlight
-            onPress={() => this.setState({showPicker: true})}>
-            <Text style={styles.emoji}>
-              {this.state.selectedEmoji || 'no emoji selected'}
-            </Text>
-          </TouchableHighlight>
-  
-          <EmojiOverlay
-            style={{
-              height: 400,
-              backgroundColor: '#f4f4f4'
-            }}
-            horizontal={true}
-            visible={this.state.showPicker}
-            onEmojiSelected={this._emojiSelected.bind(this)}
-            onTapOutside={() => this.setState({showPicker: false})} />
-  
-        </View>
-      );
-    }
+  state = {
+    emoji: ' '
   };
 
-  module.exports = Keyboard;
+  render() {
+    return (
+      <SafeAreaView style={styles.container}>
+        <Text>Please select the emoji you would like to use</Text>
+        <View style={styles.display}>
+          <Text style={{fontSize: 64, backgroundColor: 'transparent'}}>{this.state.emoji}</Text>
+        </View>
+        <EmojiSelector 
+          onEmojiSelected={emoji => this.setState({ emoji })}
+          showSearchBar={true}
+          showTabs={true}
+          showHistory={true}
+          showSectionTitles={true}
+          category={Categories.all}
+        />
+      </SafeAreaView>
+    );
+  }
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  display: {
+    width: 96,
+    height: 96,
+    margin: 24,
+    borderWidth: 2,
+    borderRadius: 12,
+    borderColor: THEME,
+    alignItems: 'center',
+    justifyContent: 'center',
+  }
+});
+
+export default Keyboard;
