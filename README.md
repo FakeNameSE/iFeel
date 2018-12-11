@@ -1,6 +1,8 @@
 # iFeel
 
-A social media app that allows people to interact with others using a limited subset of emotions.
+The culmination of technical progress -- three hundred thousand years of evolution have at last culminated in a social media app capable of providing people with truly vacuous social interaction and validation.
+
+Specifically, this is a group messenger that that allows people to interact with others using a limited subset of emotions and feign carring about others emotions with a bot.
 
 ## Getting Started
 
@@ -28,20 +30,24 @@ After installing Node:
 ## Deployment
 
 To run this app on a live system:
-1. Run `npm start` in your terminal.
-2. Scan the QR code that pops up on your screen using your phone.
-3. Allow some time for the app to build and compile.
+
+ 1. Create a Firebase account and project with authentication through email and database enabled.
+ 2. Add the api key information to the relevant section at the beginning of Main.js.
+ 3. Run `npm start` in your terminal.
+ 3. Scan the QR code that pops up on your screen using your phone.
+ 4. Allow some time for the app to build and compile.
+ 5. Get your mind blown by this apps awesomeness!
 
 Congrats! You can now use the iFeel app!
 
 ## Built With
 
-React-Native: Used to create and build the app.
-
-Node & Expo: Used to run app locally on iOS and/or Android.
-
-Firebase: Used for authentication.
+  * React-Native: Used to create and build the app.
+  * Node & Expo: Used to run app locally on iOS and/or Android.
+  * Firebase: Used for authentication and other backend stuff.
 
 ## Contributing
 
-Please see list of [contributors](https://github.com/CS196Illinois/iFeel/graphs/contributors) who participated in this project.
+Please see list of [contributors](https://github.com/CS196Illinois/iFeel/graphs/contributors) for participants of this project.
+
+We would love to add your name to the list!
