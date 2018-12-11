@@ -1,19 +1,28 @@
 // Thank you https://blog.expo.io/how-to-build-a-chat-app-with-react-native-3ef8604ebb3c
 // for the tutorial on using Gifted Chat.
 
+// Your run of the mill React-Native imports.
 import React, { Component } from 'react';
-import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import * as firebase from 'firebase';
+// Our custom components.
 import { Input } from '../components/Input';
 import { Button } from '../components/Button';
-import { SendButton } from '../components/SendButton';
+import { BotButton } from '../components/BotButton';
+// Array of potential bot responses. Might be a fancy schmancy Markov
+// chain like thing in the future.
 import {botResponses} from '../Constants.js';
-//import { Firebase } from './Firebase';
+// Gifted-chat import. The library takes care of fun stuff like
+// rendering message bubbles and having a message composer.
 import { GiftedChat } from 'react-native-gifted-chat';
 // To keep keyboard from covering up text input.
 import { KeyboardAvoidingView } from 'react-native';
 // Because keyboard avoiding behavior is platform specific.
 import {Platform} from 'react-native';
+
+// To hide the big Expo warning about timers. Firebase listener stuff
+// likes them, but react-native does not. There is currently an issue
+// open in React-Native to fix this.
 console.disableYellowBox = true;
 
 class Chat extends Component {
@@ -128,7 +137,7 @@ class Chat extends Component {
     render() {
         return (
         <View style={styles.container}>
-            <SendButton onPress={() => this.botSend()}>Bot!</SendButton>
+            <BotButton onPress={() => this.botSend()}>Bot!</BotButton>
             <GiftedChat
                 messages={this.state.messages}
                 onSend={this.send}
