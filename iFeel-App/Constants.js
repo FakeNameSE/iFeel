@@ -5,7 +5,10 @@ export const botResponses = [
     "Carthago delenda est.",
     "This is emotional support",
     "Hey, it's Geoff Challen!",
-    "👍"
+    "👍",
+    "K",
+    "Ouch",
+    "Oof"
 ];
 
 export default botResponses;
