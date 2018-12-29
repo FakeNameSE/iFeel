@@ -8,6 +8,8 @@ import * as firebase from 'firebase';
 // Our custom components.
 import { Input } from '../components/Input';
 import { Button } from '../components/Button';
+// API key and information for firebase
+import config from '../api.json';
 
 class Main extends React.Component {
     // Header theming and title
@@ -34,16 +36,17 @@ class Main extends React.Component {
     
     // Initialize Firebase
     componentWillMount() {
-        var config = {
-            apiKey: "",
-            authDomain: "ifeel-d97fc.firebaseapp.com",
-            databaseURL: "https://ifeel-d97fc.firebaseio.com",
-            projectId: "ifeel-d97fc",
-            storageBucket: "ifeel-d97fc.appspot.com",
-            messagingSenderId: "639485736592"
-        }
         firebase.initializeApp(config);
     }
+
+    loginFailed = () => {
+        this.setState({
+            authenticating: false,
+            user: null,
+            error: 'Authentication Failure',
+        })
+        Alert.alert('Login Error', 'Ruh, roh! Login failure, please tried again.');
+    };
 
     // Method to call the try to sign in the user when they hit the sign
     // in button.
@@ -68,11 +71,7 @@ class Main extends React.Component {
         // Pass name along when switching to new window
         .then(() => this.props.navigation.navigate('Gchat', { name: this.state.email }))
         // If not, then let the user know that something went wrong.
-        .catch(() => this.setState({
-            authenticating: false,
-            user: null,
-            error: 'Authentication Failure',
-        }))
+        .catch(() => this.loginFailed())
     }
 
     // Method to call if the user clicks the button to create a new
