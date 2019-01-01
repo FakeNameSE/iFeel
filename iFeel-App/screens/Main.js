@@ -69,7 +69,7 @@ class Main extends React.Component {
         // If authentication went well, take the user to the groups
         // page.
         // Pass name along when switching to new window
-        .then(() => this.props.navigation.navigate('Gchat', { name: this.state.email }))
+        .then(() => this.props.navigation.navigate('Groups', { name: this.state.email }))
         // If not, then let the user know that something went wrong.
         .catch(() => this.loginFailed())
     }

@@ -100,7 +100,7 @@ class CreateChat extends React.Component {
         //updates['/groups/' + newPostKey + '/name'] = this.state.groupName;
         // Had to send each request manually because async issues mean that a request is occasionally missing with this method.
         //firebase.database().ref().update(updates);
-        this.props.navigation.navigate('Gchat');
+        this.props.navigation.navigate('Groups');
     }
 
     // Helper function to render the screen.

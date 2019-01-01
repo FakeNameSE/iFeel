@@ -1,6 +1,6 @@
 // Your run of the mill React-Native imports.
 import React from 'react';
-import { StyleSheet, Text, View, FlatList } from 'react-native';
+import { StyleSheet, Text, View, FlatList, ActivityIndicator } from 'react-native';
 import * as firebase from 'firebase';
 // Our custom components.
 import { Input } from '../components/Input';
@@ -34,9 +34,11 @@ class Groups extends React.Component {
         state = {
             groupNames: [],
             downLoadedSnapshot: {},
+            isLoading: true,
         };
         this.reDownloadGroups = this.props.navigation.addListener('willFocus', () => {
             // Because getGroups is not called when navigating back from group creation page, need to put this here.
+            this.setState({isLoading: true});
             this.getGroups();
         });
         //this.createGroup = this.createGroup.bind(this);
@@ -46,6 +48,7 @@ class Groups extends React.Component {
     state = {
         groupNames: [],
         downLoadedSnapshot: {},
+        isLoading: true,
     };
     
     // Helper function to get user UID.
@@ -69,6 +72,7 @@ class Groups extends React.Component {
           .then(() => {
               // Add all of the groups at once from the intermediary group so that state is not constantly changing (avoids async nightmare).
               this.setState({groupNames: newGroups});
+              this.setState({isLoading: false});
           });
     }
     // Function to run when a group button is clicked, redirects to the chat page and passes id of group as param.
@@ -86,6 +90,14 @@ class Groups extends React.Component {
     }
     // Helper method to render page.
     renderCurrentState() {
+        // Show a progress doodad if the app is downloading the groups.
+        if (this.state.isLoading) {
+            return (
+              <View style={styles.form}>
+                <ActivityIndicator size='large' />
+              </View>
+            )
+        }
         // We use a FlatList and pass it a weird array.
         return (
             <FlatList
