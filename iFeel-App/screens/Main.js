@@ -3,7 +3,7 @@
 
 // Your run of the mill React-Native imports.
 import React from 'react';
-import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, StyleSheet, Text, View, Alert } from 'react-native';
 import * as firebase from 'firebase';
 // Our custom components.
 import { Input } from '../components/Input';

@@ -27,6 +27,10 @@ class CreateAccount extends React.Component {
             fontWeight: 'bold',
         },
     }
+    // Helper function to get user UID.
+    get uid() {
+        return (firebase.auth().currentUser || {}).uid;
+    }
     // Helper function to check if an email looks somewhat valid.
     checkEmail = (email) => {
         // Thank you https://stackoverflow.com/questions/36147276/how-to-validate-textinput-values-in-react-native
@@ -46,11 +50,14 @@ class CreateAccount extends React.Component {
             // Sends the entered information to Firebase to create the
             // account.
             firebase
-             .auth()
-             .createUserWithEmailAndPassword(this.state.email, this.state.password)
-             .then(() => this.props.navigation.navigate('Main'))
-             // If something goes wrong, tell the user.
-             .catch(() => this.setState({error: "Failed to create account"}))
+              .auth()
+              .createUserWithEmailAndPassword(this.state.email, this.state.password)
+            .then(() => firebase.database().ref('users/' + this.uid).set({
+                'email': this.state.email,
+            }))
+            .then(() => this.props.navigation.navigate('Main'))
+            // If something goes wrong, tell the user.
+            .catch(() => this.setState({error: "Failed to create account"}))
         // If something is wrong, tell the user what it is.
         // Creates alert dialog pop up and puts text under button.
         } else {
