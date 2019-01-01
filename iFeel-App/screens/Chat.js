@@ -47,8 +47,18 @@ class Chat extends Component {
             },
         };
     }
-    
-    // Way to keep track of messages through state
+    // Constructor to bind state and some functions to this.
+    constructor (props) {
+        super (props);
+        state = {
+            messages: [],
+            isLoadingEarlier: false,
+        };
+        this.onLoadEarlier = this.onLoadEarlier.bind(this);
+        this.renderActions = this.renderActions.bind(this);
+    }  
+   
+    // Keep track of messages and some other things through state.
     state = {
         messages: [],
         isLoadingEarlier: false,
@@ -56,10 +66,10 @@ class Chat extends Component {
 
     // Reference to where in Firebase DB messages will be stored.
     get ref() {
-        return firebase.database().ref('messages');
+        return firebase.database().ref('messages/' + this.props.navigation.state.params.groupName);
     }
     
-    onLoadEarlier = () => {
+    onLoadEarlier() {
         this.setState((previousState) => {
             return {
                 isLoadingEarlier: true,
@@ -194,7 +204,7 @@ class Chat extends Component {
 
     // Custom props
     // Button on left in composer
-    renderActions = () => {
+    renderActions() {
         return (
             <BotButton onPress={() => this.botSend()}></BotButton>
         );

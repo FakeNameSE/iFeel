@@ -24,7 +24,6 @@ const styles = StyleSheet.create({
     marginTop: 10,
     width: '100%',
     borderColor: '#eee',
-    borderBottomWidth: 2,
   
   },
   label: {
