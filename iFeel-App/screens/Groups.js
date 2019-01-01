@@ -78,7 +78,11 @@ class Groups extends React.Component {
     // Function to run when a group button is clicked, redirects to the chat page and passes id of group as param.
     onPressRedirect(groupClicked) {
         // Pass name along when switching to chat screen
-        this.props.navigation.navigate('Chat', { name: this.props.navigation.state.params.name, groupName: groupClicked })
+        this.props.navigation.navigate('Chat', {
+             email: this.props.navigation.state.params.email,
+             groupID: groupClicked[1],
+             groupName: groupClicked[0]
+        });
     }
     // When we open the screen, download current groups.
     componentDidMount() {
@@ -94,16 +98,16 @@ class Groups extends React.Component {
         if (this.state.isLoading) {
             return (
               <View style={styles.form}>
-                <ActivityIndicator size='large' />
+                <ActivityIndicator size='large' color='#13294B'/>
               </View>
             )
         }
-        // We use a FlatList and pass it a weird array.
+        // We use a FlatList and pass it an array of key value pairs.
         return (
             <FlatList
               data={this.state.groupNames}
               renderItem={({item}) =>
-                  <Button onPress={() => this.onPressRedirect(item.key[1])}>{item.key[0]}</Button>}
+                  <Button onPress={() => this.onPressRedirect(item.key)}>{item.key[0]}</Button>}
             />
         )
     }

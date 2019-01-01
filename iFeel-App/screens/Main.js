@@ -69,7 +69,7 @@ class Main extends React.Component {
         // If authentication went well, take the user to the groups
         // page.
         // Pass name along when switching to new window
-        .then(() => this.props.navigation.navigate('Groups', { name: this.state.email }))
+        .then(() => this.props.navigation.navigate('Groups', { email: this.state.email }))
         // If not, then let the user know that something went wrong.
         .catch(() => this.loginFailed())
     }
@@ -107,7 +107,7 @@ class Main extends React.Component {
         if (this.state.authenticating) {
             return (
               <View style={styles.form}>
-                <ActivityIndicator size='large' />
+                <ActivityIndicator size='large' color='#13294B'/>
               </View>
             )
         }

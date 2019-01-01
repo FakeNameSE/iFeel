@@ -34,9 +34,15 @@ class Chat extends Component {
     // this.prop.navigation
     static navigationOptions = ({ navigation }) => {
         return {
-            title: 'Chat',
+            title: 'Chat: ' + navigation.state.params.groupName,
             headerRight: (
-                <NavBarSettingsButton onPress={() => navigation.navigate('CreateChat')}></NavBarSettingsButton>
+                <NavBarSettingsButton onPress={
+                    () => navigation.navigate('EditChat', {
+                        email: navigation.state.params.email,
+                        groupID: navigation.state.params.groupID,
+                        groupName: navigation.state.params.groupName
+                    })
+                }></NavBarSettingsButton>
             ),
             headerStyle: {
                 backgroundColor: '#13294B',
@@ -46,7 +52,7 @@ class Chat extends Component {
                 fontWeight: 'bold',
             },
         };
-    }
+    };
     // Constructor to bind state and some functions to this.
     constructor (props) {
         super (props);
@@ -66,7 +72,7 @@ class Chat extends Component {
 
     // Reference to where in Firebase DB messages will be stored.
     get ref() {
-        return firebase.database().ref('messages/' + this.props.navigation.state.params.groupName);
+        return firebase.database().ref('messages/' + this.props.navigation.state.params.groupID);
     }
     
     onLoadEarlier() {
@@ -197,7 +203,7 @@ class Chat extends Component {
     get user() {
         // Return name and UID for GiftedChat to parse
         return {
-            name: this.props.navigation.state.params.name,
+            name: this.props.navigation.state.params.email,
             _id: this.uid,
         };
     }
