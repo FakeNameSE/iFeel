@@ -5,19 +5,29 @@ import * as firebase from 'firebase';
 // Our custom components.
 import { Input } from '../components/Input';
 import { Button } from '../components/Button';
+import { NavBarAddButton } from '../components/NavBarButtons';
 
 class Gchat extends React.Component {
-    //Header theming and title
-    static navigationOptions = {
-        title: 'Chats',
-        headerStyle: {
-            backgroundColor: '#13294B',
-        },
-        headerTintColor: '#fff',
-        headerTitleStyle: {
-            fontWeight: 'bold',
-        },
-      }
+    //Header theming, title, and navbar button for creating new groups.
+    // Need to give header access to functions in instance of screen
+    // with this weird, ugly fat arrow params thing, hence why the
+    // navigation prop is referred to as navigation and not
+    // this.prop.navigation
+    static navigationOptions = ({ navigation }) => {
+        return {
+            title: 'Chats',
+            headerRight: (
+                <NavBarAddButton onPress={() => navigation.navigate('CreateChat')}></NavBarAddButton>
+            ),
+            headerStyle: {
+                backgroundColor: '#13294B',
+            },
+            headerTintColor: '#fff',
+            headerTitleStyle: {
+                fontWeight: 'bold',
+            },
+        };
+    }
 
     // Function to run when group button is clicked
     onPressGroup1Redirect() {

@@ -3,12 +3,13 @@
 
 // Your run of the mill React-Native imports.
 import React, { Component } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Alert, ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 import * as firebase from 'firebase';
 // Our custom components.
 import { Input } from '../components/Input';
 import { Button } from '../components/Button';
 import { BotButton } from '../components/BotButton';
+import { NavBarSettingsButton } from '../components/NavBarButtons';
 // Array of potential bot responses. Might be a fancy schmancy Markov
 // chain like thing in the future.
 import {botResponses} from '../Constants.js';
@@ -26,34 +27,92 @@ import {Platform} from 'react-native';
 console.disableYellowBox = true;
 
 class Chat extends Component {
-    // Header theming and title.
-    static navigationOptions = {
-        title: 'Chat',
-        headerStyle: {
-            backgroundColor: '#13294B',
-        },
-        headerTintColor: '#fff',
-        headerTitleStyle: {
-            fontWeight: 'bold',
-        },
+    //Header theming, title, and navbar button for creating new groups.
+    // Need to give header access to functions in instance of screen
+    // with this weird, ugly fat arrow params thing, hence why the
+    // navigation prop is referred to as navigation and not
+    // this.prop.navigation
+    static navigationOptions = ({ navigation }) => {
+        return {
+            title: 'Chat',
+            headerRight: (
+                <NavBarSettingsButton onPress={() => navigation.navigate('CreateChat')}></NavBarSettingsButton>
+            ),
+            headerStyle: {
+                backgroundColor: '#13294B',
+            },
+            headerTintColor: '#fff',
+            headerTitleStyle: {
+                fontWeight: 'bold',
+            },
+        };
     }
     
     // Way to keep track of messages through state
     state = {
         messages: [],
+        isLoadingEarlier: false,
     };
 
     // Reference to where in Firebase DB messages will be stored.
     get ref() {
         return firebase.database().ref('messages');
     }
+    
+    onLoadEarlier = () => {
+        this.setState((previousState) => {
+            return {
+                isLoadingEarlier: true,
+            };
+        }, () => {
+            console.log(this.state.isLoadingEarlier)
+            this.setState((previousState) => {
+                return {
+                    isLoadingEarlier: false,
+                };
+            });
+        }); 
+    }
+        /*
+        this.ref
+          .orderByKey()
+          .startAt('-LTVVuOn41zWjsZ_C_s-')
+          .limitToFirst(20)
+          .once("value", function(data) {
+              console.log('Mes ' + data.key)
+          });
+          */
+        /*
+        this.ref
+          .limitToFirst(40)
+          .once("value", function(snapshot) {
+              // Return whatever is associated with snapshot.
+              const { timestamp: numberStamp, text, user } = snapshot.val();
+              const { key: _id } = snapshot;
+              // Convert timestamp to JS date object.
+              const timestamp = new Date(numberStamp);
+              // Create object for Gifted Chat. id is unique.
+              const message = {
+                  _id,
+                  timestamp,
+                  text,
+                  user,
+              };
+              this.setState((previousState) => {
+                  return {
+                      messages: GiftedChat.prepend(previousState.messages, message),
+                  };
+              });
+          });
+        */ 
+    
     // Get last 20 messages, any incoming messages, and send them to parse.
     on = callback =>
         this.ref
           .limitToLast(20)
           .on('child_added', snapshot => callback(this.parse(snapshot)));
     parse = snapshot => {
-        // Return whatever is associates with snapshot.
+        // Return whatever is associated with snapshot.
         const { timestamp: numberStamp, text, user } = snapshot.val();
         const { key: _id } = snapshot;
         // Convert timestamp to JS date object.
@@ -132,20 +191,41 @@ class Chat extends Component {
             _id: this.uid,
         };
     }
+
+    // Custom props
+    // Button on left in composer
+    renderActions = () => {
+        return (
+            <BotButton onPress={() => this.botSend()}></BotButton>
+        );
+    }
     
     //Show me the messages and chat UI! Updates as state updates.
     // Platform specific hack to ensure that the keyboard does
     // not cover the text composer.
+
+    // Old variant had button for bot floating top right with this after
+    // everything except KeyboardAvoidingView
+    // <BotButton onPress={() => this.botSend()}></BotButton>
     render() {
         return (
         <View style={styles.container}>
-            <BotButton onPress={() => this.botSend()}>Bot!</BotButton>
             <GiftedChat
+                loadEarlier={true}
+                isLoadingEarlier={this.state.isLoadingEarlier}
                 messages={this.state.messages}
                 onSend={this.send}
                 user={this.user}
+                isAnimated={true}
+                onLoadEarlier={this.onLoadEarlier}
+                renderActions={this.renderActions}
+                placeholder="I feel..."
             />
-            <KeyboardAvoidingView behavior={ Platform.OS === 'android' ? 'padding' :  null} keyboardVerticalOffset={80} />
+            <KeyboardAvoidingView behavior={
+                Platform.OS === 'android' ?
+                'padding' :  null
+            } keyboardVerticalOffset={80}
+            />
          </View>
         );
     }
