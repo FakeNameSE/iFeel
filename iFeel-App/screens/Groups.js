@@ -6,6 +6,7 @@ import * as firebase from 'firebase';
 import { Input } from '../components/Input';
 import { Button } from '../components/Button';
 import { NavBarAddButton } from '../components/NavBarButtons';
+import { NavBarLogoutButton } from '../components/NavBarButtons';
 
 class Groups extends React.Component {
     //Header theming, title, and navbar button for creating new groups.
@@ -17,7 +18,13 @@ class Groups extends React.Component {
         return {
             title: 'Chats',
             headerRight: (
-                <NavBarAddButton onPress={() => navigation.navigate('CreateChat')}></NavBarAddButton>
+                <React.Fragment>
+                    <NavBarAddButton onPress={() => navigation.navigate('CreateChat')}></NavBarAddButton>
+                    <NavBarLogoutButton onPress={() => {
+                            firebase.auth().signOut();
+                            navigation.navigate('Main');
+                    }}></NavBarLogoutButton>
+                </React.Fragment>
             ),
             headerStyle: {
                 backgroundColor: '#13294B',

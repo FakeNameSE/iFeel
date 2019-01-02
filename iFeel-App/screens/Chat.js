@@ -10,6 +10,7 @@ import { Input } from '../components/Input';
 import { Button } from '../components/Button';
 import { BotButton } from '../components/BotButton';
 import { NavBarSettingsButton } from '../components/NavBarButtons';
+import { NavBarLogoutButton } from '../components/NavBarButtons';
 // Array of potential bot responses. Might be a fancy schmancy Markov
 // chain like thing in the future.
 import {botResponses} from '../Constants.js';
@@ -27,22 +28,27 @@ import {Platform} from 'react-native';
 console.disableYellowBox = true;
 
 class Chat extends Component {
-    //Header theming, title, and navbar button for creating new groups.
-    // Need to give header access to functions in instance of screen
-    // with this weird, ugly fat arrow params thing, hence why the
-    // navigation prop is referred to as navigation and not
-    // this.prop.navigation
+    // Header theming, title, and navbar button for creating new groups.
+    // Need to give header access to functions in instance of screen with this weird, ugly fat arrow params thing, hence why the navigation prop is referred to as navigation and not this.prop.navigation.
+    // Using React.Fragment as a cleaner way to return multiple elements without having to wrap in something.
+    // Logout function put inline because easiest way, otherwise would need to pass function as navigator param. 
     static navigationOptions = ({ navigation }) => {
         return {
             title: 'Chat: ' + navigation.state.params.groupName,
             headerRight: (
-                <NavBarSettingsButton onPress={
-                    () => navigation.navigate('EditChat', {
-                        email: navigation.state.params.email,
-                        groupID: navigation.state.params.groupID,
-                        groupName: navigation.state.params.groupName
-                    })
-                }></NavBarSettingsButton>
+                <React.Fragment>
+                    <NavBarSettingsButton onPress={
+                        () => navigation.navigate('EditChat', {
+                            email: navigation.state.params.email,
+                            groupID: navigation.state.params.groupID,
+                            groupName: navigation.state.params.groupName
+                        })
+                    }></NavBarSettingsButton>
+                    <NavBarLogoutButton onPress={() => {
+                        firebase.auth().signOut();
+                        navigation.navigate('Main');
+                    }}></NavBarLogoutButton>
+                </React.Fragment>
             ),
             headerStyle: {
                 backgroundColor: '#13294B',
@@ -62,6 +68,7 @@ class Chat extends Component {
         };
         this.onLoadEarlier = this.onLoadEarlier.bind(this);
         this.renderActions = this.renderActions.bind(this);
+        //this.onPressLogOut = this.onPressLogOut.bind(this);
     }  
    
     // Keep track of messages and some other things through state.
@@ -184,9 +191,9 @@ class Chat extends Component {
     
     // Save message objects. Actually sends them to server.
     append = message => this.ref.push(message);
-
-    // When we open the chat, start looking for messages.
+        
     componentDidMount() {
+        // When we open the chat, start looking for messages.
         this.on(message =>
           this.setState(previousState => ({
               messages: GiftedChat.append(previousState.messages, message),

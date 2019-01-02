@@ -21,15 +21,25 @@ const NavBarAddButton = ({ onPress }) => {
     )
 }
 
+// Logout button.
+const NavBarLogoutButton = ({ onPress }) => {
+    return (
+      <TouchableOpacity onPress={onPress} style={styles.button}>
+        <Image source={require('../assets/logout.png')} />
+      </TouchableOpacity>
+    )
+}
+
 const styles = StyleSheet.create({
     button: {
-      padding: 10,
+      padding: 5,
     }
 });
 
 export {
     NavBarSettingsButton,
-    NavBarAddButton
+    NavBarAddButton,
+    NavBarLogoutButton
 };
  
  
