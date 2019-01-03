@@ -70,9 +70,15 @@ class Groups extends React.Component {
           .once('value')
           .then((snapshot) => {
               //console.log(snapshot);
+              let i = 0;
               snapshot.forEach( (child) => {
                   // Adds a dictionary with the value as an array with the name and id of the group to the intermediary array.
-                  newGroups.push({key: [child.child('name').val(), child.ref.key]});
+                  // Maintain separate id and value keys to avoid warning, since id needs to be unique (so here a simple incrementing index).
+                  newGroups.push({
+                      id: i,
+                      name: [child.child('name').val(), child.ref.key]
+                  });
+                  i++;
                   //console.log(child.child('name').val() + ': ' + child.ref.key);
               })
           })
@@ -110,11 +116,13 @@ class Groups extends React.Component {
             )
         }
         // We use a FlatList and pass it an array of key value pairs.
+        // Need to cast the id to a string with keyExtractor to avoid warning.
         return (
             <FlatList
               data={this.state.groupNames}
+              keyExtractor={item => item.id.toString()}
               renderItem={({item}) =>
-                  <Button onPress={() => this.onPressRedirect(item.key)}>{item.key[0]}</Button>}
+                  <Button onPress={() => this.onPressRedirect(item.name)}>{item.name[0]}</Button>}
             />
         )
     }

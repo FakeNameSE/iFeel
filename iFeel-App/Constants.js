@@ -6,6 +6,13 @@ export const botResponses = [
     "This is emotional support",
     "Hey, it's Geoff Challen!",
     "👍",
+    "🙂",
+    "👍",
+    "✋",
+    "🤷",
+    "😺",
+    "🙁",
+    "😿",
     "K",
     "Ouch",
     "Oof"

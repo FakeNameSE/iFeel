@@ -3,12 +3,14 @@
 
 // Your run of the mill React-Native imports.
 import React, { Component } from 'react';
-import { Alert, ActivityIndicator, StyleSheet, Text, View } from 'react-native';
+import { Alert, ActivityIndicator, StyleSheet, Text, View, FlatList } from 'react-native';
 import * as firebase from 'firebase';
 // Our custom components.
 import { Input } from '../components/Input';
 import { Button } from '../components/Button';
 import { BotButton } from '../components/BotButton';
+import { TextPickerButton } from '../components/TextPickerButton';
+import { SliderButton } from '../components/SliderButton';
 import { NavBarSettingsButton } from '../components/NavBarButtons';
 import { NavBarLogoutButton } from '../components/NavBarButtons';
 // Array of potential bot responses. Might be a fancy schmancy Markov
@@ -21,6 +23,9 @@ import { GiftedChat } from 'react-native-gifted-chat';
 import { KeyboardAvoidingView } from 'react-native';
 // Because keyboard avoiding behavior is platform specific.
 import {Platform} from 'react-native';
+
+import SlidingUpPanel from 'rn-sliding-up-panel';
+
 
 // To hide the big Expo warning about timers. Firebase listener stuff
 // likes them, but react-native does not. There is currently an issue
@@ -62,20 +67,19 @@ class Chat extends Component {
     // Constructor to bind state and some functions to this.
     constructor (props) {
         super (props);
-        state = {
+        this.responses = [];
+        // Keep track of messages and some other things through state.
+        this.state = {
             messages: [],
             isLoadingEarlier: false,
+            visible: false,
+            responses: [],
         };
         this.onLoadEarlier = this.onLoadEarlier.bind(this);
         this.renderActions = this.renderActions.bind(this);
-        //this.onPressLogOut = this.onPressLogOut.bind(this);
+        this.renderInputToolbar = this.renderInputToolbar.bind(this);
+        this.sendSelected = this.sendSelected.bind(this);
     }  
-   
-    // Keep track of messages and some other things through state.
-    state = {
-        messages: [],
-        isLoadingEarlier: false,
-    };
 
     // Reference to where in Firebase DB messages will be stored.
     get ref() {
@@ -188,11 +192,36 @@ class Chat extends Component {
             };
             this.append(message);
     };
+
+    // Send message from input selection.
+    sendSelected(selectedText) {
+        this.setState({visible: false});
+        text = selectedText;
+        user = this.user;
+            const message = {
+                text,
+                user,
+                timestamp: this.timestamp,
+            };
+        this.append(message);
+    }
     
     // Save message objects. Actually sends them to server.
     append = message => this.ref.push(message);
         
     componentDidMount() {
+        // Populate responses for user to input.
+        let tempResponses = [];
+        let i = 0;
+        // Maintain separate id and value keys to avoid warning, since id needs to be unique (so here a simple incrementing index).
+        botResponses.forEach(function(resp) {
+            tempResponses.push({
+                id: i,
+                response: resp
+            });
+            i++;
+        });
+        this.setState({responses: tempResponses});
         // When we open the chat, start looking for messages.
         this.on(message =>
           this.setState(previousState => ({
@@ -223,14 +252,22 @@ class Chat extends Component {
         );
     }
     
-    //Show me the messages and chat UI! Updates as state updates.
-    // Platform specific hack to ensure that the keyboard does
-    // not cover the text composer.
-
-    // Old variant had button for bot floating top right with this after
-    // everything except KeyboardAvoidingView
-    // <BotButton onPress={() => this.botSend()}></BotButton>
+    // Replacing ordinary textinput message input.
+    renderInputToolbar() {
+        // Slider button calling a slide-in FlatList of potential inputs.
+        return (
+            <View style={styles.bottomButton}>
+                <SliderButton onPress={() => this.setState({visible: true})}>I feel...</SliderButton>
+            </View>
+        );
+    }
+  
+    // Show me the messages and chat UI! Updates as state updates.
     render() {
+        // KeyboardAvoidingView: Platform specific hack to ensure that the keyboard does not cover the text composer.
+        // Variant had button for bot botton next to Gifted Chat composer (does not work with slide-in FlatList).
+        //renderActions={this.renderActions}
+        // item.id.toString(): Need to cast the id to a string with keyExtractor to avoid warning.
         return (
         <View style={styles.container}>
             <GiftedChat
@@ -241,9 +278,23 @@ class Chat extends Component {
                 user={this.user}
                 isAnimated={true}
                 onLoadEarlier={this.onLoadEarlier}
-                renderActions={this.renderActions}
+                renderInputToolbar={this.renderInputToolbar}
                 placeholder="I feel..."
             />
+            <BotButton onPress={() => this.botSend()}></BotButton>
+            <SlidingUpPanel
+              visible={this.state.visible}
+              onRequestClose={() => this.setState({visible: false})}>
+              <View style={styles.container}>
+                <Text style={styles.text}>I feel...</Text>
+                <FlatList
+                  data={this.state.responses}
+                  keyExtractor={item => item.id.toString()}
+                  renderItem={({item}) =>
+                  <TextPickerButton onPress={() => this.sendSelected(item.response)}>{item.response}</TextPickerButton>}
+                />
+              </View>
+            </SlidingUpPanel>
             <KeyboardAvoidingView behavior={
                 Platform.OS === 'android' ?
                 'padding' :  null
@@ -266,6 +317,20 @@ const styles = StyleSheet.create({
   },
   form: {
     flex: 1
+  },
+  // Make text in slide-in input look pretty.
+  text: {
+    color: 'white',
+    fontWeight: '700',
+    textAlign: 'center',
+    padding: 10,
+    fontSize: 18,
+  },
+  // Needed to position button to trigger input slide-in.
+  bottomButton: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    alignItems: 'center'
   }
 });
 export default Chat; 
