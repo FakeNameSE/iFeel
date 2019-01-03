@@ -22,21 +22,15 @@ class CreateChat extends React.Component {
     // Constructor to bind state and some functions to this.
     constructor (props) {
         super (props);
-        state = {
+        // Stores new group state, e.g. what group name, and members have
+        //been entered, and the user object.
+        this.state = {
             groupName: '',
             groupMembers: '',
             error: '',
         };
         this.createGroup = this.createGroup.bind(this);
     }
-
-    // Stores new group state, e.g. what group name, and members have
-    //been entered, and the user object.
-    state = {
-        groupName: '',
-        groupMembers: '',
-        error: '',
-    };
 
     // Helper function to get user UID.
     get uid() {

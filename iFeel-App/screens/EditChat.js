@@ -28,7 +28,8 @@ class EditChat extends React.Component {
     // Constructor to bind state and some functions to this.
     constructor (props) {
         super (props);
-        state = {
+        // Stores new group state, e.g. what group name, and members have been entered, and the user object.
+        this.state = {
             addMembers: '',
             removeMembers: '',
             error: '',
@@ -36,20 +37,14 @@ class EditChat extends React.Component {
         this.editGroup = this.editGroup.bind(this);
     }
 
-    // Stores new group state, e.g. what group name, and members have
-    //been entered, and the user object.
-    state = {
-        addMembers: '',
-        removeMembers: '',
-        error: '',
-    };
-
     // Helper function to get user UID.
     get uid() {
         return (firebase.auth().currentUser || {}).uid;
     }
     
     editGroup() {
+        // First, reset errors in case this function was run before.
+        this.setState({error: ''});
         // Unique ID of group to modify.
         const GroupId = this.props.navigation.state.params.groupID;
         // Group name
@@ -143,13 +138,13 @@ class EditChat extends React.Component {
         return (
           <View style={styles.form}>
             <Input
-              placeholder='Members to add...'
+              placeholder='Comma separated emails...'
               label='Members to add'
               onChangeText={addMembers => this.setState({ addMembers })}
               value={this.state.addMembers}
             />
             <Input
-              placeholder='Members to remove...'
+              placeholder='Comma separated emails...'
               label='Members to remove'
               onChangeText={removeMembers => this.setState({ removeMembers })}
               value={this.state.removeMembers}

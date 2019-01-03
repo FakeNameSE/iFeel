@@ -12,16 +12,17 @@ const BotButton = ({ onPress }) => {
 
 const styles = StyleSheet.create({
   button: {
-    //marginTop: 10,
+    marginTop: 5,
+    marginLeft: 5,
     padding: 10,
-    width: 50,
-    height: 50,
+    width: 70,
+    height: 70,
     backgroundColor: '#13294B',
-    borderRadius: 25,
+    borderRadius: 35,
     alignItems: 'center',
     justifyContent:'center',
-    //position: "absolute",
-    //alignSelf: 'flex-end',
+    position: "absolute",
+    alignSelf: 'flex-end',
   }
 });
 
