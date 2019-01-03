@@ -54,7 +54,6 @@ class Main extends React.Component {
         this.setState({
             authenticating: true,
         });
-
         const { email, password } = this.state;
         // Send the entered username and password to Firebase to check
         // if they are correct.
@@ -69,9 +68,12 @@ class Main extends React.Component {
         // If authentication went well, take the user to the groups
         // page.
         // Pass name along when switching to new window
-        .then(() => this.props.navigation.navigate('Gchat', { name: this.state.email }))
+        .then(() => this.props.navigation.navigate('Groups', { email: this.state.email }))
+        // Wipe entered credentials from textinput.
+        .then(() => {this.setState({email: '', password: '',})})
+        
         // If not, then let the user know that something went wrong.
-        .catch(() => this.loginFailed())
+        .catch(() => this.loginFailed());
     }
 
     // Method to call if the user clicks the button to create a new
@@ -82,24 +84,6 @@ class Main extends React.Component {
         this.props.navigation.navigate('CreateAccount')
     }
 
-    // Method to log the user out.
-    // Not used right now, but you never know when you might need it.
-    onPressLogOut() {
-        // Sign the user out on the Firebase end.
-        firebase.auth().signOut()
-        // Wipe the user state.
-        .then(() => {
-              this.setState({
-                  email: '',
-                  password: '',
-                  authenticating: false,
-                  user: null,
-              })
-          }, error => {
-              console.error('Sign Out Error', error);
-          });
-    }
-
     // Helper function to render the screen.
     renderCurrentState() {
         // Show a progress doodad if the app is trying to log the user
@@ -107,7 +91,7 @@ class Main extends React.Component {
         if (this.state.authenticating) {
             return (
               <View style={styles.form}>
-                <ActivityIndicator size='large' />
+                <ActivityIndicator size='large' color='#13294B'/>
               </View>
             )
         }

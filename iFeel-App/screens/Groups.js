@@ -1,11 +1,12 @@
 // Your run of the mill React-Native imports.
 import React from 'react';
-import { StyleSheet, Text, View, FlatList } from 'react-native';
+import { StyleSheet, Text, View, FlatList, ActivityIndicator } from 'react-native';
 import * as firebase from 'firebase';
 // Our custom components.
 import { Input } from '../components/Input';
 import { Button } from '../components/Button';
 import { NavBarAddButton } from '../components/NavBarButtons';
+import { NavBarLogoutButton } from '../components/NavBarButtons';
 
 class Groups extends React.Component {
     //Header theming, title, and navbar button for creating new groups.
@@ -17,7 +18,13 @@ class Groups extends React.Component {
         return {
             title: 'Chats',
             headerRight: (
-                <NavBarAddButton onPress={() => navigation.navigate('CreateChat')}></NavBarAddButton>
+                <React.Fragment>
+                    <NavBarAddButton onPress={() => navigation.navigate('CreateChat')}></NavBarAddButton>
+                    <NavBarLogoutButton onPress={() => {
+                            firebase.auth().signOut();
+                            navigation.navigate('Main');
+                    }}></NavBarLogoutButton>
+                </React.Fragment>
             ),
             headerStyle: {
                 backgroundColor: '#13294B',
@@ -34,9 +41,11 @@ class Groups extends React.Component {
         state = {
             groupNames: [],
             downLoadedSnapshot: {},
+            isLoading: true,
         };
         this.reDownloadGroups = this.props.navigation.addListener('willFocus', () => {
             // Because getGroups is not called when navigating back from group creation page, need to put this here.
+            this.setState({isLoading: true});
             this.getGroups();
         });
         //this.createGroup = this.createGroup.bind(this);
@@ -46,6 +55,7 @@ class Groups extends React.Component {
     state = {
         groupNames: [],
         downLoadedSnapshot: {},
+        isLoading: true,
     };
     
     // Helper function to get user UID.
@@ -69,12 +79,17 @@ class Groups extends React.Component {
           .then(() => {
               // Add all of the groups at once from the intermediary group so that state is not constantly changing (avoids async nightmare).
               this.setState({groupNames: newGroups});
+              this.setState({isLoading: false});
           });
     }
     // Function to run when a group button is clicked, redirects to the chat page and passes id of group as param.
     onPressRedirect(groupClicked) {
         // Pass name along when switching to chat screen
-        this.props.navigation.navigate('Chat', { name: this.props.navigation.state.params.name, groupName: groupClicked })
+        this.props.navigation.navigate('Chat', {
+             email: this.props.navigation.state.params.email,
+             groupID: groupClicked[1],
+             groupName: groupClicked[0]
+        });
     }
     // When we open the screen, download current groups.
     componentDidMount() {
@@ -86,12 +101,20 @@ class Groups extends React.Component {
     }
     // Helper method to render page.
     renderCurrentState() {
-        // We use a FlatList and pass it a weird array.
+        // Show a progress doodad if the app is downloading the groups.
+        if (this.state.isLoading) {
+            return (
+              <View style={styles.form}>
+                <ActivityIndicator size='large' color='#13294B'/>
+              </View>
+            )
+        }
+        // We use a FlatList and pass it an array of key value pairs.
         return (
             <FlatList
               data={this.state.groupNames}
               renderItem={({item}) =>
-                  <Button onPress={() => this.onPressRedirect(item.key[1])}>{item.key[0]}</Button>}
+                  <Button onPress={() => this.onPressRedirect(item.key)}>{item.key[0]}</Button>}
             />
         )
     }

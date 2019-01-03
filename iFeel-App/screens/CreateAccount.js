@@ -87,14 +87,14 @@ class CreateAccount extends React.Component {
                 value={this.state.email}
               />
               <Input
-                placeholder='Please enter your password. Min 7 chars...'
+                placeholder='Enter your password. Min 7 chars...'
                 label='Password'
                 secureTextEntry
                 onChangeText={password => this.setState({ password })}
                 value={this.state.password}
               />
               <Input
-                placeholder='Pretty please reenter your password...'
+                placeholder='Please reenter your password...'
                 label='Password'
                 secureTextEntry
                 onChangeText={password2 => this.setState({ password2 })}

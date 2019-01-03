@@ -5,7 +5,6 @@ import * as firebase from 'firebase';
 // Our custom components.
 import { Input } from '../components/Input';
 import { Button } from '../components/Button';
-import { NavBarAddButton } from '../components/NavBarButtons';
 
 class CreateChat extends React.Component {
     //Header theming, title, and navbar button for creating new groups.
@@ -87,8 +86,8 @@ class CreateChat extends React.Component {
                 // This .then is the best way I could figure out to print all nonexistent emails because of async nightmares.
                 .then(() => {
                     if (nonExistent.length > 0) {
-                        Alert.alert('Warning', 'User ' + nonExistent + ' do(es) not exist. Existing users have been added to the group. Please recheck your spelling.');
-                        this.setState({'error': 'User ' + nonExistent + ' do(es) not exist. Existing users have been added to the group. Please recheck your spelling.'});
+                        Alert.alert('Warning', 'User(s) ' + nonExistent + ' do(es) not exist. Existing users have been added to the group. Please recheck your spelling.');
+                        this.setState({'error': 'User(s) ' + nonExistent + ' do(es) not exist. Existing users have been added to the group. Please recheck your spelling.'});
                     }
                 });
         }
@@ -100,7 +99,7 @@ class CreateChat extends React.Component {
         //updates['/groups/' + newPostKey + '/name'] = this.state.groupName;
         // Had to send each request manually because async issues mean that a request is occasionally missing with this method.
         //firebase.database().ref().update(updates);
-        this.props.navigation.navigate('Gchat');
+        this.props.navigation.navigate('Groups');
     }
 
     // Helper function to render the screen.
