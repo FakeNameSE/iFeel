@@ -3,34 +3,35 @@
 
 // Your run of the mill React-Native imports.
 import React, { Component } from 'react';
-import { Alert, ActivityIndicator, StyleSheet, Text, View, FlatList } from 'react-native';
+import { Alert, ActivityIndicator, StyleSheet, Text, View, SectionList } from 'react-native';
 import * as firebase from 'firebase';
 // Our custom components.
 import { Input } from '../components/Input';
 import { Button } from '../components/Button';
 import { BotButton } from '../components/BotButton';
 import { TextPickerButton } from '../components/TextPickerButton';
-import { SliderButton } from '../components/SliderButton';
+import { OpenSliderButton } from '../components/SliderButton';
+import { CloseSliderButton } from '../components/SliderButton';
 import { NavBarSettingsButton } from '../components/NavBarButtons';
 import { NavBarLogoutButton } from '../components/NavBarButtons';
-// Array of potential bot responses. Might be a fancy schmancy Markov
-// chain like thing in the future.
-import {botResponses} from '../Constants.js';
-// Gifted-chat import. The library takes care of fun stuff like
-// rendering message bubbles and having a message composer.
+// Component for dialog for inputs to slide up.
+import SlidingUpPanel from 'rn-sliding-up-panel';
+// Array of potential responses. Might be a fancy schmancy Markov chain like thing for bots in the future.
+import {potentialPosts} from '../Constants.js';
+import {potentialResponses} from '../Constants.js';
+// Gifted-chat import. The library takes care of fun stuff like rendering message bubbles and having a message composer (that we override).
 import { GiftedChat } from 'react-native-gifted-chat';
 // To keep keyboard from covering up text input.
 import { KeyboardAvoidingView } from 'react-native';
 // Because keyboard avoiding behavior is platform specific.
 import {Platform} from 'react-native';
 
-import SlidingUpPanel from 'rn-sliding-up-panel';
-
-
 // To hide the big Expo warning about timers. Firebase listener stuff
 // likes them, but react-native does not. There is currently an issue
 // open in React-Native to fix this.
-console.disableYellowBox = true;
+console.ignoredYellowBox = [
+    'Setting a timer'
+]
 
 class Chat extends Component {
     // Header theming, title, and navbar button for creating new groups.
@@ -73,19 +74,24 @@ class Chat extends Component {
             messages: [],
             isLoadingEarlier: false,
             visible: false,
+            allowDragging: true,
             responses: [],
+            posts: [],
         };
         this.onLoadEarlier = this.onLoadEarlier.bind(this);
         this.renderActions = this.renderActions.bind(this);
         this.renderInputToolbar = this.renderInputToolbar.bind(this);
         this.sendSelected = this.sendSelected.bind(this);
+        this.renderListFooterComponent = this.renderListFooterComponent.bind(this);
+        // Need to bind these in constructor, or repetitive firing of binding causes crash.
+        this.onScrollBeginDrag = this.onScrollBeginDrag.bind(this);
+        this.onEndReached = this.onEndReached.bind(this);
     }  
 
     // Reference to where in Firebase DB messages will be stored.
     get ref() {
         return firebase.database().ref('messages/' + this.props.navigation.state.params.groupID);
     }
-    
     onLoadEarlier() {
         this.setState((previousState) => {
             return {
@@ -132,7 +138,6 @@ class Chat extends Component {
               });
           });
         */ 
-    
     // Get last 20 messages, any incoming messages, and send them to parse.
     on = callback =>
         this.ref
@@ -157,7 +162,6 @@ class Chat extends Component {
     off() {
         this.ref.off();
     }
-
     // Helper function to get user UID.
     get uid() {
         return (firebase.auth().currentUser || {}).uid;
@@ -166,7 +170,6 @@ class Chat extends Component {
     get timestamp() {
         return firebase.database.ServerValue.TIMESTAMP;
     }
-
     // Helper function that takes array of messages and prepares all of
     // them to be sent.
     send = messages => {
@@ -180,10 +183,9 @@ class Chat extends Component {
             this.append(message);
         }
     };
-
     botSend = messages => {
         //const { text, user } = messages[0];
-        text = botResponses[Math.floor(Math.random() * botResponses.length)];
+        text = potentialResponses[Math.floor(Math.random() * potentialResponses.length)];
         user = this.user;
             const message = {
                 text,
@@ -192,7 +194,6 @@ class Chat extends Component {
             };
             this.append(message);
     };
-
     // Send message from input selection.
     sendSelected(selectedText) {
         this.setState({visible: false});
@@ -205,7 +206,6 @@ class Chat extends Component {
             };
         this.append(message);
     }
-    
     // Save message objects. Actually sends them to server.
     append = message => this.ref.push(message);
         
@@ -214,14 +214,26 @@ class Chat extends Component {
         let tempResponses = [];
         let i = 0;
         // Maintain separate id and value keys to avoid warning, since id needs to be unique (so here a simple incrementing index).
-        botResponses.forEach(function(resp) {
+        potentialResponses.forEach(function(resp) {
             tempResponses.push({
                 id: i,
-                response: resp
+                text: resp
+            });
+            i++;
+        });
+        // Populate posts too.
+        let tempPosts = [];
+        i = 0;
+        // Maintain separate id and value keys to avoid warning, since id needs to be unique (so here a simple incrementing index).
+        potentialPosts.forEach(function(p) {
+            tempPosts.push({
+                id: i,
+                text: 'I feel ' + p // Prepend I feel before each post.
             });
             i++;
         });
         this.setState({responses: tempResponses});
+        this.setState({posts: tempPosts});
         // When we open the chat, start looking for messages.
         this.on(message =>
           this.setState(previousState => ({
@@ -233,7 +245,6 @@ class Chat extends Component {
     componentWillUnmount() {
         this.off();
     }
-
     // Used to display the current user's messages on the other side of
     // the screen.
     get user() {
@@ -251,17 +262,34 @@ class Chat extends Component {
             <BotButton onPress={() => this.botSend()}></BotButton>
         );
     }
-    
     // Replacing ordinary textinput message input.
     renderInputToolbar() {
         // Slider button calling a slide-in FlatList of potential inputs.
         return (
-            <View style={styles.bottomButton}>
-                <SliderButton onPress={() => this.setState({visible: true})}>I feel...</SliderButton>
-            </View>
+        <View style={styles.bottomButton}>
+            <OpenSliderButton onPress={() => this.setState({visible: true})}>I feel/care...</OpenSliderButton>
+        </View>
         );
     }
-  
+    // Horizontal line to divide buttons in post selector.
+    renderItemSeparatorComponent() {
+        return (
+        <View style={styles.line} />
+        );
+    }
+    renderListFooterComponent() {
+        return (
+        <View style={{ height: 0, marginBottom: 90 }}></View>
+            
+        );
+    }
+    // Callbacks for when the SectionList is scrolling to prevent the sliding-up-panel from moving during scroll.
+    onScrollBeginDrag() {
+        this.setState({allowDragging: false})
+    }
+    onEndReached() {
+        this.setState({allowDragging: true})
+    }
     // Show me the messages and chat UI! Updates as state updates.
     render() {
         // KeyboardAvoidingView: Platform specific hack to ensure that the keyboard does not cover the text composer.
@@ -284,16 +312,29 @@ class Chat extends Component {
             <BotButton onPress={() => this.botSend()}></BotButton>
             <SlidingUpPanel
               visible={this.state.visible}
+              allowDragging={this.state.allowDragging}
               onRequestClose={() => this.setState({visible: false})}>
-              <View style={styles.container}>
-                <Text style={styles.text}>I feel...</Text>
-                <FlatList
-                  data={this.state.responses}
+            <View style={styles.container}>
+                <View style={styles.topButton}>
+                    <CloseSliderButton onPress={() => this.setState({visible: false})}>Close</CloseSliderButton>
+                </View>
+                <SectionList
+                  renderSectionHeader={({section: {title}}) => (
+                      <Text style={styles.sectionHeader}>{title}</Text>
+                  )}
+                  sections={[
+                      {title: 'I feel', data: this.state.posts},
+                      {title: 'I care', data: this.state.responses},
+                  ]}
+                  stickySectionHeadersEnabled={true}
+                  renderItem={({item}) => <TextPickerButton onPress={() => this.sendSelected(item.text)}>{item.text}</TextPickerButton>}
+                  ItemSeparatorComponent={this.renderItemSeparatorComponent}
+                  ListFooterComponent={this.renderListFooterComponent}
                   keyExtractor={item => item.id.toString()}
-                  renderItem={({item}) =>
-                  <TextPickerButton onPress={() => this.sendSelected(item.response)}>{item.response}</TextPickerButton>}
+                  onEndReached={this.onEndReached}
+                  onScrollBeginDrag={this.onScrollBeginDrag}
                 />
-              </View>
+            </View>
             </SlidingUpPanel>
             <KeyboardAvoidingView behavior={
                 Platform.OS === 'android' ?
@@ -307,30 +348,42 @@ class Chat extends Component {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    //padding: 20,
-    //alignItems: 'center',
-    //justifyContent: 'center',
-    //flexDirection: 'row',
-    backgroundColor: '#E84A27',
-  },
-  form: {
-    flex: 1
-  },
-  // Make text in slide-in input look pretty.
-  text: {
-    color: 'white',
-    fontWeight: '700',
-    textAlign: 'center',
-    padding: 10,
-    fontSize: 18,
-  },
-  // Needed to position button to trigger input slide-in.
-  bottomButton: {
-    flex: 1,
-    justifyContent: 'flex-end',
-    alignItems: 'center'
-  }
+    container: {
+        flex: 1,
+        //padding: 20,
+        //alignItems: 'center',
+        //justifyContent: 'center',
+        //flexDirection: 'row',
+        backgroundColor: '#E84A27',
+    },
+    form: {
+        flex: 1
+    },
+    // Make text in slide-in input look pretty.
+    sectionHeader: {
+        color: 'black',
+        backgroundColor: '#efefef',
+        fontWeight: 'bold',
+        padding: 5,
+        fontSize: 20,
+    },
+    // Needed to position button to trigger input slide-in.
+    bottomButton: {
+        flex: 1,
+        justifyContent: 'flex-end',
+        alignItems: 'center'
+    },
+    // Needed to position button to trigger input slide-in close.
+    // Careful, flex: 1 would screw this up.
+    topButton: {
+        justifyContent: 'flex-start',
+        alignItems: 'center'
+    },
+    line: {
+        backgroundColor: '#efefef',
+        alignSelf: 'center',
+        height: 0.5,
+        width: '100%'
+    },
 });
 export default Chat; 
