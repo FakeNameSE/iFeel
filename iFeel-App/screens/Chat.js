@@ -16,15 +16,18 @@ import { NavBarSettingsButton } from '../components/NavBarButtons';
 import { NavBarLogoutButton } from '../components/NavBarButtons';
 // Component for dialog for inputs to slide up.
 import SlidingUpPanel from 'rn-sliding-up-panel';
-// Array of potential responses. Might be a fancy schmancy Markov chain like thing for bots in the future.
+// Array of potential responses and posts. Might be a fancy schmancy Markov chain like thing for bots in the future.
 import {potentialPosts} from '../Constants.js';
 import {potentialResponses} from '../Constants.js';
+import {botResponses} from '../Constants.js';
 // Gifted-chat import. The library takes care of fun stuff like rendering message bubbles and having a message composer (that we override).
 import { GiftedChat } from 'react-native-gifted-chat';
 // To keep keyboard from covering up text input.
 import { KeyboardAvoidingView } from 'react-native';
 // Because keyboard avoiding behavior is platform specific.
 import {Platform} from 'react-native';
+// NLP library for sentiment analysis, also works with emojis.
+const Sentiment = require('sentiment');
 
 // To hide the big Expo warning about timers. Firebase listener stuff
 // likes them, but react-native does not. There is currently an issue
@@ -98,7 +101,7 @@ class Chat extends Component {
                 isLoadingEarlier: true,
             };
         }, () => {
-            console.log(this.state.isLoadingEarlier)
+            //console.log(this.state.isLoadingEarlier)
             this.setState((previousState) => {
                 return {
                     isLoadingEarlier: false,
@@ -180,33 +183,62 @@ class Chat extends Component {
                 user,
                 timestamp: this.timestamp,
             };
+            // Now send the message to the server.
             this.append(message);
         }
     };
     botSend = messages => {
+        const sentiment = new Sentiment();
+        let valence = 0;
+        // Find the latest message by another user, the one "we" are responding too.
+        for (let i = 0; i < this.state.messages.length ; i++) {
+            if (this.state.messages[i].user['_id'] !== this.user['_id']) {
+                // Calculate the emotional valence of this message.
+                // Some emojis have no score in the library, so hand-ranked here.
+                var options = {extras: {'☺️': 5,'😯': 0.5,'🤔': -0.5,'🙁': -1,'😟': -1,'☹️': -2,'😢': -2,'🤢': -2,'⚰️': -3,'🤮': -3,'😭': -3}};
+                let analysis = sentiment.analyze(this.state.messages[i].text, options);
+                valence = analysis.score;
+                break;
+            }
+        }
+        // Valence is usually between -5 and 5, pick an appropriate category of response.
+        let category = '';
+        if (valence <= -1) {
+            category = 'Negative';
+        }
+        else if (valence > -1 && valence < 2) {
+            category = 'Neutral';
+        }
+        else {
+            category = 'Positive';
+        }
         //const { text, user } = messages[0];
-        text = potentialResponses[Math.floor(Math.random() * potentialResponses.length)];
+        // Using this category, randomly select a message deemed suitable as a possible response by the kind of person who spends his time making this stuff instead of interacting with people.
+        // As you can see, this bot exhibits cutting edge emotional intelligence so you don't have to. 
+        text = botResponses[category][Math.floor(Math.random() * botResponses[category].length)];
         user = this.user;
-            const message = {
-                text,
-                user,
-                timestamp: this.timestamp,
-            };
-            this.append(message);
+        const message = {
+            text,
+            user,
+            timestamp: this.timestamp,
+        };
+        // Now send the message to the server.
+        this.append(message);
     };
     // Send message from input selection.
     sendSelected(selectedText) {
         this.setState({visible: false});
         text = selectedText;
         user = this.user;
-            const message = {
-                text,
-                user,
-                timestamp: this.timestamp,
-            };
+        const message = {
+            text,
+            user,
+            timestamp: this.timestamp,
+        };
+        // Now send the message to the server.
         this.append(message);
     }
-    // Save message objects. Actually sends them to server.
+    // Functino to save message objects. Actually sends them to server.
     append = message => this.ref.push(message);
         
     componentDidMount() {

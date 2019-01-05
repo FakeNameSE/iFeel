@@ -3,14 +3,20 @@
 export const potentialPosts = [
     "happy",
     "very happy",
+    "👍",
     "☺️",
     "😄",
+    "😂",
+    "💜",
     "sad",
     "very sad",
     "🙁",
     "☹️",
+    "👎",
+    "😦",
     "😢",
     "😭",
+    "💔",
     "angry",
     "very angry",
     "😟",
@@ -27,6 +33,7 @@ export const potentialPosts = [
     "very scared",
     "😨",
     "😱",
+    "😧",
     "empty",
     "very empty",
     "😐",
@@ -63,3 +70,36 @@ export const potentialResponses = [
     "Oof",
     "Yikes!"
 ];
+
+// Potential bot responses, same as potentialResponses but subdivided into buckets categorizing their suitability as responses to statements of varying emotional valence.
+export const botResponses = {
+    'Negative': [
+        "This is empathy",
+        "😢",
+        "I am there for you.",
+        "Oof",
+        "Yikes!",
+        "Ouch",
+        "🤗",
+        "I believe in you.",
+        "I care about you",
+        "This is emotional support",
+    ],
+    'Neutral': [
+         "K",
+         "Sounds good",
+         "I hope this response provides you with empty validation!",
+         "I care about your feelings",
+        ],
+    'Positive': [
+        "☺️",
+        "✋",
+        "💯",
+        "👐",
+        "😌",
+        "👍",
+        "Good for you!",
+        "Nice!",
+        "Great!",
+    ]
+};
