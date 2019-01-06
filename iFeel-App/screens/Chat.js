@@ -88,7 +88,7 @@ class Chat extends Component {
         this.renderListFooterComponent = this.renderListFooterComponent.bind(this);
         // Need to bind these in constructor, or repetitive firing of binding causes crash.
         this.onScrollBeginDrag = this.onScrollBeginDrag.bind(this);
-        this.onEndReached = this.onEndReached.bind(this);
+        this.onScrollEndDrag = this.onScrollEndDrag.bind(this);
     }  
 
     // Reference to where in Firebase DB messages will be stored.
@@ -319,7 +319,7 @@ class Chat extends Component {
     onScrollBeginDrag() {
         this.setState({allowDragging: false})
     }
-    onEndReached() {
+    onScrollEndDrag() {
         this.setState({allowDragging: true})
     }
     // Show me the messages and chat UI! Updates as state updates.
@@ -363,7 +363,7 @@ class Chat extends Component {
                   ItemSeparatorComponent={this.renderItemSeparatorComponent}
                   ListFooterComponent={this.renderListFooterComponent}
                   keyExtractor={item => item.id.toString()}
-                  onEndReached={this.onEndReached}
+                  onScrollEndDrag={this.onScrollEndDrag}
                   onScrollBeginDrag={this.onScrollBeginDrag}
                 />
             </View>
