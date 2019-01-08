@@ -32,7 +32,7 @@
       "package": "com.ThreeGIndustries.iFeel",
       "adaptiveIcon": {
         "foregroundImage": "./assets/android/foreground.png",
-        "backgroundColor": "#152a49ff"
+        "backgroundColor": "#152a49"
       },
       "icon": "./assets/android/icon.png"
     }
