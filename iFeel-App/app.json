@@ -4,13 +4,12 @@
     "description": "A social media app providing pure vacuous social validation.",
     "slug": "iFeel",
     "privacy": "public",
-    "sdkVersion": "30.0.0",
+    "sdkVersion": "32.0.0",
     "platforms": [
       "ios",
       "android"
     ],
     "version": "1.0.0",
-    "orientation": "portrait",
     "icon": "./assets/icon.png",
     "githubUrl": "https://github.com/CS196Illinois/iFeel/tree/master/iFeel-App",
     "splash": {
@@ -26,10 +25,16 @@
     ],
     "ios": {
       "bundleIdentifier": "com.ThreeGIndustries.iFeel",
-      "supportsTablet": true
+      "supportsTablet": false,
+      "icon": "./assets/ios/icon.png"
     },
     "android": {
-      "package": "com.ThreeGIndustries.iFeel"
+      "package": "com.ThreeGIndustries.iFeel",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/android/foreground.png",
+        "backgroundColor": "#152a49ff"
+      },
+      "icon": "./assets/android/icon.png"
     }
   }
 }
