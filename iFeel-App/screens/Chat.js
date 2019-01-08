@@ -29,13 +29,6 @@ import {Platform} from 'react-native';
 // NLP library for sentiment analysis, also works with emojis.
 const Sentiment = require('sentiment');
 
-// To hide the big Expo warning about timers. Firebase listener stuff
-// likes them, but react-native does not. There is currently an issue
-// open in React-Native to fix this.
-console.ignoredYellowBox = [
-    'Setting a timer'
-]
-
 class Chat extends Component {
     // Header theming, title, and navbar button for creating new groups.
     // Need to give header access to functions in instance of screen with this weird, ugly fat arrow params thing, hence why the navigation prop is referred to as navigation and not this.prop.navigation.
