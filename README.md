@@ -11,9 +11,9 @@ The inspiration for the name comes from an imaginary app in the novel *The Nix* 
 As for the color scheme, the answer boils down to a lack of artistic talent rationalized post-hoc as school pride.
 
 ## Screen Recording!
-
-
 ![Screen Recording](screenshots/screen_recording.gif)
+
+*Apologies for the poor screen recording quality*
 
 ## Where Did This Come From?
 This app was initially a final project for the freshman honors course CS 196 at UIUC.
@@ -28,6 +28,7 @@ Group members
   * Neil Reddy
   
 With Nirmal Prakash as our guiding hand and course assigned Project Manager.
+
 ### Now
 The project has since been taken up and extended by Grant Garrett-Grossman to bring it to its full potential. Currently, iFeel sports:
 
@@ -43,7 +44,7 @@ The project has since been taken up and extended by Grant Garrett-Grossman to br
 
  1. Create a [Firebase](https://firebase.google.com/) account (used for backend), create a project from the Firebase console, and copy the server setup API code and company for web applications into a new file called `api.json` under iFeel-App.
  2. Clone this repository.
- 3. Install Node [^0].
+ 3. [Install Node](https://nodejs.org/en/download/).
  4. Open a terminal in the iFeel-App directory and run `npm install`.
  5. Run `expo start`, fire up an emulator or install the Expo app on your phone
  6. Get your mind blown by this apps awesomeness!
@@ -65,6 +66,3 @@ Congrats! You can now use the iFeel app!
 Please see list of [contributors](https://github.com/CS196Illinois/iFeel/graphs/contributors) for participants of this project.
 
 We would love to add your name to the list!
-
-
-[^0]: For Node installation: <https://nodejs.org/en/download/>
