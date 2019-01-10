@@ -57,9 +57,11 @@ Congrats! You can now use the iFeel app!
 
 ## Built With
 
-  * React-Native: Used for the frontend with a few libraries.
+  * React-Native: app frontend.
+  * GiftedChat: React Native library used to render chat UI (namely message bubbles).
+  * Firebase: backend — authentication and storing message, group, and user data in its NoSQL RealTime Database.
+  * Sentiment: a Node library that uses some basic natural language processing to assign an emotional valence ranging between -5 and 5 to text and emojis.
   * Node & Expo: Used to run app locally on iOS and/or Android.
-  * Firebase: Used for authentication and other backend stuff to store messages.
 
 ## Contributing
 
