@@ -33,7 +33,7 @@ class Main extends React.Component {
         user: null,
         error: '',
     }
-    
+
     // Initialize Firebase
     componentWillMount() {
         firebase.initializeApp(config);
@@ -45,7 +45,7 @@ class Main extends React.Component {
             user: null,
             error: 'Authentication Failure',
         })
-        Alert.alert('Login Error', 'Ruh, roh! Login failure, please tried again.');
+        Alert.alert('Login Error', 'Ruh, roh! Login failure, please try again.');
     };
 
     // Method to call the try to sign in the user when they hit the sign
@@ -71,7 +71,7 @@ class Main extends React.Component {
         .then(() => this.props.navigation.navigate('Groups', { email: this.state.email }))
         // Wipe entered credentials from textinput.
         .then(() => {this.setState({email: '', password: '',})})
-        
+
         // If not, then let the user know that something went wrong.
         .catch(() => this.loginFailed());
     }
@@ -143,4 +143,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default Main; 
+export default Main;
